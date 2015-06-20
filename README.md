@@ -1,3 +1,4 @@
+
 # Web Application Template
 
 This template provides a base for developing a web application which includes a ReactJS client-side application and an HTTP web server for serving both static content and an API emitting JSON (or another data format).
@@ -57,3 +58,15 @@ There's a slight lag, but keep an eye on your `sbt` console for information rega
 ## Questions?
 
 [dev@allenai.org](mailto:dev@allenai.org)
+
+This is a web interface for the profiler. 
+
+- The assumptions is that the profiler data base is running on a machine on a AWS EC2 machine. 
+- The user will be able to choose knowledge schema and qeuery based on that. 
+- Querying is simply filling our the missing values (dependant on the type of schema).  
+- The output will be results matching to the query, sorted by their score. 
+- The tabular representation seems to be appropriate enough. 
+
+
+The technologies used: 
+- 
