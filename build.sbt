@@ -11,7 +11,10 @@ enablePlugins(WebappPlugin)
 libraryDependencies ++= Seq(
   allenAiCommon,
   allenAiWebapp,
-  sprayJson
+  sprayJson,
+  "edu.illinois.cs.cogcomp" % "profiler-client" % "2.0-SNAPSHOT"
 )
 
 javaOptions ++= Seq(s"-Dlogback.appname=${name.value}")
+
+resolvers += Resolver.mavenLocal

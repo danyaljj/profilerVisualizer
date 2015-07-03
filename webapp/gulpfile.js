@@ -2,12 +2,15 @@
 
 var gulp = require('gulp');
 var syrup = require('syrup');
+var reactBootstrap = require('react-bootstrap');
 
 syrup.gulp.init(
   gulp,
-  undefined,
-  // any instances of %TITLE% which exist in index.html will be replaced with the corresponding
-  // value
-  { '%TITLE%': 'Sample Web Application' },
-  { build: '../public' }
+  { compressJs: false, sourceMaps: false, disableJsHint: true, detectGlobals: true },
+  { '%TITLE%': 'Profiler Visualizer' },
+  {
+    less: 'app/*.less',
+    allLess: 'app/**/*.less',
+    build: '../public'
+  }
 );
