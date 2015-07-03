@@ -168,11 +168,9 @@ class ProfilerVisualizer extends React.Component {
       entityType: this.state.profilerType,
       queryType: queryType
     }, { timeout: 50000, responseType: 'json' }).then(function(response) {
-          console.log('response: ');
-          console.log(JSON.parse(response.text));
+          //console.log('response = ' + JSON.parse(response.text));
           self.setState({queryResult: JSON.parse(response.text)});
-          console.log('result of log : ');
-          console.log(self.state.queryResult);
+          //console.log('result of log : ' + self.state.queryResult);
           //console.log(this.state.loading);
       }.bind(this)
     );
@@ -200,12 +198,12 @@ class ProfilerVisualizer extends React.Component {
     for (var key in map) tupleArray.push([key, map[key]]);
     tupleArray.sort(function (a, b) { return b[1] - a[1] });
     var sortedMap = {};
-    tupleArray.forEach(function(el) {  sortedMap[el[0]] = el[1] } )
+    tupleArray.forEach(function(el) {  sortedMap[el[0]] = el[1] } );
     return sortedMap;
   }
 
   ShowATable(schemaName) {
-    if ( Array.isArray(this.state.queryResult) ) {
+    if ( Array.isArray(this.state.queryResult) && schemaName in this.state.queryResult[0].counts ) {
       var tableContent1 = this.state.queryResult[0].counts[schemaName];
       var tableContent = this.sortMapByValue(tableContent1);
       var resultAll =  Object.keys( tableContent );
@@ -244,7 +242,7 @@ class ProfilerVisualizer extends React.Component {
 
   ShowASimpleTable(schemaName) {
     var rows = [];
-    if ( Array.isArray(this.state.queryResult) ) {
+    if ( Array.isArray(this.state.queryResult) && schemaName in this.state.queryResult[0].counts ) {
       var tableContent1 = this.state.queryResult[0].counts[schemaName];
       var tableContent = this.sortMapByValue(tableContent1);
       var titles = ['Attribute', 'Frequency'];
@@ -255,14 +253,13 @@ class ProfilerVisualizer extends React.Component {
 
       var contents = Object.keys(tableContent).slice(0,this.state.maxItemsPerTable).map(function(key) { return [key, tableContent[key]] });
 
-      console.log("Size of contents = ");
-      console.log(contents.length);
+      console.log("Size of contents = " + contents.length);
       console.log(contents);
 
       var bodyRows = [];
       if (Array.isArray(contents)) {
         contents.forEach(function (row, i) {
-          console.log('Inside forEach: i = ' + i);
+          //console.log('Inside forEach: i = ' + i);
           var goo = <tr key={i + 1}>{self.ShowARowOfTable(row)}</tr>;
           bodyRows.push(goo);
         });
@@ -273,8 +270,7 @@ class ProfilerVisualizer extends React.Component {
     }
     //rows.push(<thead> <tr> <td> 2 </td> </tr> </thead>);
     //rows.push(<tbody> <tr> <td> 1 </td> </tr> </tbody>);
-
-    console.log(rows);
+    //console.log(rows);
     var Table = require('react-bootstrap').Table;
     return (<Table striped bordered condensed hover>{rows}</Table> );
   }
@@ -481,14 +477,22 @@ adad
                 Query
               </Button>
 
-              <h1> Dependency  </h1>
+              <h1> DepN  </h1>
               {this.ShowASimpleTable('DepN')}
-              <h1> Dependency  </h1>
+              <h1> DepNER  </h1>
               {this.ShowASimpleTable('DepNER')}
-              <h1> Dependency  </h1>
+              <h1> DepV  </h1>
               {this.ShowASimpleTable('DepV')}
-
+              <h1> DepLabel  </h1>
+              {this.ShowATable('DepLabel')}
+              <h1> DepNER_WITH_LABELS  </h1>
+              {this.ShowATable('DepNER_WITH_LABELS')}
+              <h1> DepN_WITH_LABELS  </h1>
+              {this.ShowATable('DepN_WITH_LABELS')}
+              <h1> DepV_WITH_LABELS  </h1>
+              {this.ShowATable('DepV_WITH_LABELS')}
             </Panel>
+
 
             <Panel>
               <div className="tree">
