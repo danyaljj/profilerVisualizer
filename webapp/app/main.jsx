@@ -473,6 +473,29 @@ adad
                   </li>
                 </ul>
               </div>
+              <Button bsStyle="success" bsSize="small" onClick={this.queryHandle.bind(this, 2)}>
+                Query
+              </Button>
+
+              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION  </h1>
+              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION')}
+
+            </Panel>
+
+            <Panel>
+              <div className="tree">
+                <ul>
+                  <li>
+                  <span className="so-label" >
+                    {this.getRoleList(role_simple_before)}
+                  </span>
+                    {this.getAttributeList(attributes)}
+                  </li>
+                  <li>
+                    {this.getQueryList()}
+                  </li>
+                </ul>
+              </div>
               <Button bsStyle="success" bsSize="small" onClick={this.queryHandle.bind(this, 1)}>
                 Query
               </Button>

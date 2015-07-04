@@ -36,8 +36,7 @@ class SampleService extends Directives with SprayJsonSupport {
                 case 2 => SchemaCategories.TRIPLE
               }
               //println("querySchemaCategory = " + querySchemaCategory)
-              val profiles = profilerClient.queryProfiles(querySurface, queryLabel, queryEntity, querySchemaCategory)
-
+              val profiles = profilerClient.queryProfiles(querySurface, queryLabel, queryEntity, querySchemaCategory, 20)
               println("number of profiles found = " + profiles.size())
 
               //            val scalaProfiles = Profiles.convertProfilesToScala(profiles)
