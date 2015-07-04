@@ -282,18 +282,6 @@ class ProfilerVisualizer extends React.Component {
     this.queryView();
   }
 
-  simpleSchema() {
-    var Well = require('react-bootstrap').Well;
-
-    return (
-        <div>
-          <Well>
-adad
-          </Well>
-        </div>
-      );
-  }
-
   queryView() {
     var Button = require('react-bootstrap').Button;
     var ButtonGroup = require('react-bootstrap').ButtonGroup;
@@ -395,13 +383,27 @@ adad
     });
   }
 
-  getQueryList(self) {
+  getQueryList(self, isWikiDisabled) {
     var MenuItem = require('react-bootstrap').MenuItem;
     var DropdownButton = require('react-bootstrap').DropdownButton;
     var Input = require('react-bootstrap').Input;
     var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
     var Button = require('react-bootstrap').Button;
     var ButtonGroup = require('react-bootstrap').ButtonGroup;
+
+    var isVerbActive = '';
+    var isWikiActive = '';
+    if (this.state.profilerType == 0 ) {
+      isVerbActive = 'active';
+      isWikiActive = '';
+    }
+    else {
+      isWikiActive = 'active';
+      isVerbActive = '';
+    }
+    var wikiDisabled = '';
+    if( isWikiDisabled )
+      wikiDisabled = 'disabled';
 
     return (
         <DropdownButton bsStyle='primary' title='Attribute' key='1'  bsSize='xsmall'>
@@ -446,33 +448,38 @@ adad
         <main className="text-center padded">
           <section>
             <TabbedArea defaultActiveKey={this.state.panelState} onSelect={this.handleSelectPanel.bind(this)}>
-              <TabPane eventKey={1} tab='Query'>  </TabPane>
-              <TabPane eventKey={2} tab='Help'>  </TabPane>
-              <TabPane eventKey={3} tab='About'>  </TabPane>
+              <TabPane eventKey={1} tab='Per-graph view'>  </TabPane>
+              <TabPane eventKey={2} tab='Profile view'>  </TabPane>
+              <TabPane eventKey={3} tab='Help'>  </TabPane>
+              <TabPane eventKey={4} tab='About'>  </TabPane>
             </TabbedArea>
 
             <div>
-              <Panel header={this.state.panelTitle}>
+              <Panel id="mainPanel" header={this.state.panelTitle}>
                 {this.state.panelContent}
               </Panel>
             </div>
 
-            {this.simpleSchema()}
 
             <Panel>
               <div className="tree">
                 <ul>
                   <li>
-                  <span className="so-label" >
-                    {this.getRoleList(role_simple_before)}
-                  </span>
-                    {this.getAttributeList(attributes)}
+                    <ul>
+                      <li><a href="#">Grand Child</a></li>
+                      <li><a href="#">Grand Child</a></li>
+                      <li><a href="#">Grand Child</a></li>
+                    </ul>
                   </li>
                   <li>
-                    {this.getQueryList()}
+                    <ul>
+                      <li><a href="#">Grand Child</a></li>
+                      <li><a href="#">Grand Child</a></li>
+                      <li><a href="#">Grand Child</a></li>
+                    </ul>
                   </li>
                 </ul>
-              </div>
+            </div>
               <Button bsStyle="success" bsSize="small" onClick={this.queryHandle.bind(this, 2)}>
                 Query
               </Button>
@@ -518,22 +525,32 @@ adad
 
 
             <Panel>
-              <div className="tree">
-                <ul>
-                  <li>
-                    <span className="so-label" >
-                      {this.getRoleList(role_simple_before)}
-                    </span>
-                    {this.getAttributeList(attributes)}
-                  </li>
-                  <li>
-                    {this.getQueryList()}
-                  </li>
-                </ul>
-              </div>
-              <Button bsStyle="success" bsSize="small" onClick={this.queryHandle.bind(this, 0)}>
-                Query
-              </Button>
+              <div id="pairGraphMain">
+                <div>
+                  <div className="tree" id="pairGraph">
+                    <ul>
+                      <li>
+                        <span className="so-label" >
+                          {this.getRoleList(role_simple_before)}
+                        </span>
+                        {this.getAttributeList(attributes)}
+                      </li>
+                      <li>
+                        <span>
+                        {this.getQueryList()}
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <Button bsStyle="success" bsSize="small" onClick={this.queryHandle.bind(this, 0)}>
+                  Query
+                </Button>
+                </div>
+
+              <Panel header="Concept Graph" bsStyle='success'>
+                HEre is some explanation
+              </Panel>
 
               <h1>Nearest Noun After </h1>
               {this.ShowASimpleTable('NNA')}

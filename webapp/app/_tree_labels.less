@@ -1,12 +1,22 @@
 .so-label {
   position: absolute;
-  top: -40%;
+  top: -52%;
   width: 100%;
-  font-size: 0.8em;
+  font-size: 1em;
 }
 li:first-child .so-label {
   left: 50%;
 }
 li:last-child .so-label {
   left: -50%;
+}
+
+.tree li .so-label:after{
+  content: "◀";
+  position: absolute;
+  left: 50%;
+  width: 10px;
+  margin-left: -5px;
+  top: 13px;
+  z-index: 100;
 }
