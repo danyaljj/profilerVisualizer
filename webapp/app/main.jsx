@@ -156,11 +156,6 @@ class ProfilerVisualizer extends React.Component {
 
       // results of query
       queryResult: "",
-      queryResultPairwise: "",
-      queryResultTriples: "",
-      queryResultQuaduple: "",
-      queryResult6Tuple: "",
-      queryResult7Tuple: "",
 
       // query information
       profilerType: 0,
@@ -170,15 +165,29 @@ class ProfilerVisualizer extends React.Component {
       surfaceString: '',
       labelString: '',
       maxItemsPerTable: 20,
-      pairwiseExplanation: '',
+
+      // quadruple
+      quadrupleAttribute: 0,
+      quadrupleRole: 0,
+      queryResultQuadruple: "",
+      quadrupleExplanation: '',
+
+      // triple
+      tripleAttribute: 0,
+      tripleRole: 0,
+      queryResultTriple: "",
+      tripleExplanation: '',
 
       // pairwise
       pairwiseAttribute: 0,
-      pairwiseRole: 0
+      pairwiseRole: 0,
+      queryResultPairwise: "",
+      pairwiseExplanation: ''
     };
   }
 
-  queryHandle(queryType) {
+  queryHandle(queryType, conceptGraphType) {
+    console.log('conceptGraphType = ' +  conceptGraphType );
     this.setState({ loading: true });
     console.log(this.state.surfaceString);
     console.log(this.state.labelString);
@@ -194,8 +203,17 @@ class ProfilerVisualizer extends React.Component {
       entityType: this.state.profilerType,
       queryType: queryType
     }, { timeout: 50000, responseType: 'json' }).then(function(response) {
-          //console.log('response = ' + JSON.parse(response.text));
-          self.setState({queryResult: JSON.parse(response.text)});
+          console.log('response.text = ' + response.text);
+          console.log('response = ' + JSON.parse(response.text));
+          //self.setState({queryResult: JSON.parse(response.text)});
+
+          if( conceptGraphType === 0 )
+            self.setState({queryResultPairwise: JSON.parse(response.text)});
+          else if( conceptGraphType === 1 )
+            self.setState({queryResultTriple: JSON.parse(response.text)});
+          else if( conceptGraphType === 2 )
+            self.setState({queryResultQuadruple: JSON.parse(response.text)});
+
           //console.log('result of log : ' + self.state.queryResult);
           //console.log(this.state.loading);
       }.bind(this)
@@ -228,9 +246,22 @@ class ProfilerVisualizer extends React.Component {
     return sortedMap;
   }
 
-  ShowATable(schemaName, simple) {
-    if ( Array.isArray(this.state.queryResult) && schemaName in this.state.queryResult[0].counts ) {
-      var tableContent1 = this.state.queryResult[0].counts[schemaName];
+  ShowATable(schemaName, queryType) {
+    console.log('queryType = ' + queryType);
+    var qResult;
+    if( queryType === 0 )
+      qResult = this.state.queryResultPairwise;
+    else if( queryType === 1 )
+      qResult = this.state.queryResultTriple;
+    else if( queryType === 2 )
+      qResult = this.state.queryResultQuadruple;
+
+    console.log('ShowATable: qResult = ' + qResult);
+
+    //if ( Array.isArray(this.state.queryResult) && schemaName in this.state.queryResult[0].counts ) {
+    //  var tableContent1 = this.state.queryResult[0].counts[schemaName];
+    if ( Array.isArray(qResult) && schemaName in qResult[0].counts ) {
+      var tableContent1 = qResult[0].counts[schemaName];
       console.log("schemaName = " + schemaName);
       console.log("tableContent1 = " + tableContent1);
       var tableContent = this.sortMapByValue(tableContent1);
@@ -268,11 +299,23 @@ class ProfilerVisualizer extends React.Component {
     return (<Table striped bordered condensed hover>{rows}</Table> );
   }
 
-  ShowASimpleTable(schemaName) {
+  ShowASimpleTable(schemaName, queryType) {
     var rows = [];
-    if ( Array.isArray(this.state.queryResult) && schemaName in this.state.queryResult[0].counts ) {
-      var tableContent1 = this.state.queryResult[0].counts[schemaName];
-      var tableContent = this.sortMapByValue(tableContent1);
+    var qResult;
+    if( queryType === 0 )
+      qResult = this.state.queryResultPairwise;
+    else if( queryType === 1 )
+      qResult = this.state.queryResultTriple;
+    else if( queryType === 2 )
+      qResult = this.state.queryResultQuadruple;
+
+    console.log('ShowASimpleTable: qResult = ' + qResult);
+
+    //if ( Array.isArray(this.state.queryResult) && schemaName in this.state.queryResult[0].counts ) {
+    //  var tableContent1 = this.state.queryResult[0].counts[schemaName];
+    if ( Array.isArray(qResult) && schemaName in qResult[0].counts ) {
+      var tableContent1 = qResult[0].counts[schemaName];
+    var tableContent = this.sortMapByValue(tableContent1);
       var titles = ['Attribute', 'Frequency'];
 
       var self = this;
@@ -386,7 +429,10 @@ class ProfilerVisualizer extends React.Component {
     console.log('inside handleSelectRoleList');
     console.log(key);
     console.log('type = ' + type);
-    this.setState({ pairwiseRole: key });
+    if(type === 0)
+      this.setState({ pairwiseRole: key });
+    else if(type === 1)
+      this.setState({ tripleRole: key });
   }
 
   getAttributeList(_att, type) {
@@ -402,11 +448,17 @@ class ProfilerVisualizer extends React.Component {
     );
   }
 
-  handleSelectAttributeList(type,key) {
+  handleSelectAttributeList(type, key) {
     console.log('inside handleSelectAttributeList');
     console.log(key);
     console.log('type = ' + type);
-    this.setState({ pairwiseAttribute: key });
+    if( type === 0 )
+      this.setState({ pairwiseAttribute: key });
+    else if( type === 1 )
+      this.setState({ tripleAttribute: key });
+    else if( type === 2 )
+      this.setState({ quadrupleAttribute: key });
+
   }
 
   entityClicked() {
@@ -472,13 +524,13 @@ class ProfilerVisualizer extends React.Component {
   }
 
   showPairwiseSchema() {
-    console.log('this.state.pairwiseAttribute = ' + this.state.pairwiseAttribute);
-    console.log('this.state.pairwiseRole = ' + this.state.pairwiseRole);
+    //console.log('this.state.pairwiseAttribute = ' + this.state.pairwiseAttribute);
+    //console.log('this.state.pairwiseRole = ' + this.state.pairwiseRole);
 
     var att = attributes[this.state.pairwiseAttribute];
     var role = role_pairwise[this.state.pairwiseRole];
-    console.log('att = ' + att);
-    console.log('role = ' + role);
+    //console.log('att = ' + att);
+    //console.log('role = ' + role);
 
     var schema = '';
     var schemaSimple = '';
@@ -560,14 +612,13 @@ class ProfilerVisualizer extends React.Component {
     //{this.ShowATable('EA', true)};
     //<h1> Entity Before </h1>
     //{this.ShowATable('EB', true)}
-
     //schema = 'NPA';
 
     var output = '';
     if ( schema!='' )
-      output = this.ShowATable(schema, true);
+      output = this.ShowATable(schema, 0);
     if ( schemaSimple!='' )
-      output = this.ShowASimpleTable(schemaSimple, true);
+      output = this.ShowASimpleTable(schemaSimple, 0);
     return (
       <div>
         {output}
@@ -575,7 +626,147 @@ class ProfilerVisualizer extends React.Component {
     );
   }
 
-  render() {
+
+  showTripleSchema() {
+    console.log('Triple: this.state.pairwiseAttribute = ' + this.state.tripleAttribute);
+
+    var triple_att = ['POS', 'NER'];
+    var att = triple_att[this.state.tripleAttribute];
+    console.log('Triple: att = ' + att);
+
+    var schema = '';
+    var schemaSimple = '';
+
+    if(att === 'NER' )
+      schema = 'NEAREST_NER_PAIR';
+    else if(att === 'POS' )
+      schema = 'NEAREST_POS_PAIR';
+
+    console.log('TRIPLE: schema = ' + schema);
+    console.log('TRIPLE: schemaSimple = ' + schemaSimple);
+
+    var output = '';
+    if ( schema!='' )
+      output = this.ShowATable(schema, 1);
+    if ( schemaSimple!='' )
+      output = this.ShowASimpleTable(schemaSimple, 1);
+    return (
+        <div>
+          {output}
+        </div>
+    );
+  }
+
+
+  showQuadrupleSchema() {
+    console.log('Triple: this.state.pairwiseAttribute = ' + this.state.quadrupleAttribute);
+
+    var quadruple_att = ['Dep Label', 'Aggregate'];
+    var att = quadruple_att[this.state.quadrupleAttribute];
+    console.log('Quadruple: att = ' + att);
+
+    var schema = '';
+    var schemaSimple = '';
+
+    if(att === 'Dep Label' )
+      schema = 'DEP_COREF';
+    else if(att === 'Aggregate' )
+      schema = 'DEP_COREF_WITH_PATH_BASED_LABELS';
+
+    console.log('Quadruple: schema = ' + schema);
+    console.log('Quadruple: schemaSimple = ' + schemaSimple);
+
+    var output = '';
+    if ( schema!='' )
+      output = this.ShowATable(schema, 2);
+    if ( schemaSimple!='' )
+      output = this.ShowASimpleTable(schemaSimple, 2);
+    return (
+        <div>
+          {output}
+        </div>
+    );
+  }
+
+
+
+//<h1> DepN  </h1>
+//{this.ShowASimpleTable('DepN')}
+//<h1> DepNP  </h1>
+//{this.ShowASimpleTable('DepNP')}
+//<h1> DepNER  </h1>
+//{this.ShowASimpleTable('DepNER')}
+//<h1> DepV  </h1>
+//{this.ShowASimpleTable('DepV')}
+//<h1> DepVP  </h1>
+//{this.ShowASimpleTable('DepVP')}
+//<h1> DepM  </h1>
+//{this.ShowASimpleTable('DepM')}
+//<h1> DepLabel  </h1>
+//{this.ShowATable('DepLabel', true)}
+//<h1> DepWithLabels  </h1>
+//{this.ShowATable('DepWithLabels', true)}
+//<h1> DepNER_WITH_LABELS  </h1>
+//{this.ShowATable('DepNER_WITH_LABELS', true)}
+//<h1> DepN_WITH_LABELS  </h1>
+//{this.ShowATable('DepN_WITH_LABELS', true)}
+//<h1> DepNP_WITH_LABELS  </h1>
+//{this.ShowATable('DepNP_WITH_LABELS', true)}
+//<h1> DepV_WITH_LABELS  </h1>
+//{this.ShowATable('DepV_WITH_LABELS', true)}
+//<h1> DepVP_WITH_LABELS  </h1>
+//{this.ShowATable('DepVP_WITH_LABELS', true)}
+//<h1> DepM_WITH_LABELS  </h1>
+//{this.ShowATable('DepM_WITH_LABELS', true)}
+//<h1> DEP_COREF  </h1>
+//{this.ShowATable('DEP_COREF', true)}
+//<h1> DEP_COREF_WITH_PATH_BASED_LABELS  </h1>
+//{this.ShowATable('DEP_COREF_WITH_PATH_BASED_LABELS', true)}
+
+
+
+
+//<h1> TRIPLE_BEFORE  </h1>
+//{this.ShowATable('TRIPLE_BEFORE', true)}
+//<h1> TRIPLE_AFTER  </h1>
+//{this.ShowATable('TRIPLE_AFTER', true)}
+//<h1> TRIPLE_BEFORE_NER_LABEL  </h1>
+//{this.ShowATable('TRIPLE_BEFORE_NER_LABEL', true)}
+//<h1> TRIPLE_AFTER_NER_LABEL  </h1>
+//{this.ShowATable('TRIPLE_AFTER_NER_LABEL', true)}
+//<h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION  </h1>
+//{this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION', true)}
+//<h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION  </h1>
+//{this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION', true)}
+//<h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT  </h1>
+//{this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', true)}
+//<h1> TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT  </h1>
+//{this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', true)}
+//
+//<h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH  </h1>
+//{this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', true)}
+//<h1> TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH  </h1>
+//{this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', true)}
+//
+//
+//<h1> TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION  </h1>
+//{this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION', true)}
+//<h1> TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION  </h1>
+//{this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION', true)}
+//
+//<h1> TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT  </h1>
+//{this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', true)}
+//<h1> TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT  </h1>
+//{this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', true)}
+//
+//<h1> TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH  </h1>
+//{this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH', true)}
+//<h1> TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH  </h1>
+//{this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH', true)}
+
+
+
+render() {
     var Button = require('react-bootstrap').Button;
     var ButtonGroup = require('react-bootstrap').ButtonGroup;
     var TabPane = require('react-bootstrap').TabPane;
@@ -650,120 +841,103 @@ class ProfilerVisualizer extends React.Component {
               <Button bsStyle="success" bsSize="small" onClick={this.queryHandle.bind(this, 2)}>
                 Query
               </Button>
-
-              <h1> TRIPLE_BEFORE  </h1>
-                {this.ShowATable('TRIPLE_BEFORE', true)}
-              <h1> TRIPLE_AFTER  </h1>
-              {this.ShowATable('TRIPLE_AFTER', true)}
-              <h1> TRIPLE_BEFORE_NER_LABEL  </h1>
-              {this.ShowATable('TRIPLE_BEFORE_NER_LABEL', true)}
-              <h1> TRIPLE_AFTER_NER_LABEL  </h1>
-              {this.ShowATable('TRIPLE_AFTER_NER_LABEL', true)}
-              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION  </h1>
-              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION', true)}
-              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION  </h1>
-              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION', true)}
-              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT  </h1>
-              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', true)}
-              <h1> TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT  </h1>
-              {this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', true)}
-
-              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH  </h1>
-              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', true)}
-              <h1> TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH  </h1>
-              {this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', true)}
-
-
-              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION  </h1>
-              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION', true)}
-              <h1> TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION  </h1>
-              {this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION', true)}
-
-              <h1> TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT  </h1>
-              {this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', true)}
-              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT  </h1>
-              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', true)}
-
-              <h1> TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH  </h1>
-              {this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH', true)}
-              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH  </h1>
-              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH', true)}
-
             </Panel>
 
             <Panel>
-              <div className="tree">
-                <ul>
+              <Panel header="Concept Graph" bsStyle='success'>
+                <div id="pairGraphMain">
+                  <div className="tree" id="pairGraph">
+                    <ul>
+                      <li>
+                        <span className="so-label" >
+                          {this.getRoleList(['Dep'])}
+                        </span>
+                        {this.getAttributeList(['Dep Label', 'Aggregate'],2)}
+                      </li>
+                      <li>
+                        <span className="so-label" >
+                          {this.getRoleList(['Co-reffered'])}
+                        </span>
+                        {this.getAttributeList(['Dep Label', 'Aggregate'],2)}
+                      </li>
+                      <li>
+                        {this.getAttributeList(['Dep Label', 'Aggregate'],2)}
+                        <span className="so-label" >
+                          {this.getRoleList(['Dep'])}
+                        </span>
+                      </li>
+                      <li>
+                        {this.getQueryList()}
+                      </li>
+                    </ul>
+                  </div>
+                  <Button bsStyle="success" bsSize="small" onClick={this.queryHandle.bind(this, 1, 2)}>
+                    Query
+                  </Button>
+                </div>
+                <p id="explanationParagraph">
+                  Explanation: {this.state.tripleExplanation}
+                </p>
+              </Panel>
+              {this.showQuadrupleSchema()}
+              <h1> DEP_COREF  </h1>
+              {this.ShowATable('DEP_COREF', 2)}
+              <h1> DEP_COREF_WITH_PATH_BASED_LABELS  </h1>
+              {this.ShowATable('DEP_COREF_WITH_PATH_BASED_LABELS', 2)}
+            </Panel>
+
+            <Panel>
+              <Panel header="Concept Graph" bsStyle='success'>
+                <div id="pairGraphMain">
+                  <div className="tree" id="pairGraph">
+                  <ul>
                   <li>
                   <span className="so-label" >
-                    {this.getRoleList(role_simple_before)}
+                    {this.getRoleList(['before'])}
                   </span>
-                    {this.getAttributeList(attributes)}
+                    {this.getAttributeList(['POS', 'NER'],1)}
                   </li>
                   <li>
                     {this.getQueryList()}
                   </li>
+                  <li>
+                    {this.getAttributeList(['POS', 'NER'],1)}
+                  <span className="so-label" >
+                    {this.getRoleList(['after'])}
+                  </span>
+                  </li>
                 </ul>
               </div>
-              <Button bsStyle="success" bsSize="small" onClick={this.queryHandle.bind(this, 1)}>
+              <Button bsStyle="success" bsSize="small" onClick={this.queryHandle.bind(this, 0, 1)}>
                 Query
               </Button>
-
-              <h1> DepN  </h1>
-              {this.ShowASimpleTable('DepN')}
-              <h1> DepNP  </h1>
-              {this.ShowASimpleTable('DepNP')}
-              <h1> DepNER  </h1>
-              {this.ShowASimpleTable('DepNER')}
-              <h1> DepV  </h1>
-              {this.ShowASimpleTable('DepV')}
-              <h1> DepVP  </h1>
-              {this.ShowASimpleTable('DepVP')}
-              <h1> DepM  </h1>
-              {this.ShowASimpleTable('DepM')}
-              <h1> DepLabel  </h1>
-              {this.ShowATable('DepLabel', true)}
-              <h1> DepWithLabels  </h1>
-              {this.ShowATable('DepWithLabels', true)}
-              <h1> DepNER_WITH_LABELS  </h1>
-              {this.ShowATable('DepNER_WITH_LABELS', true)}
-              <h1> DepN_WITH_LABELS  </h1>
-              {this.ShowATable('DepN_WITH_LABELS', true)}
-              <h1> DepNP_WITH_LABELS  </h1>
-              {this.ShowATable('DepNP_WITH_LABELS', true)}
-              <h1> DepV_WITH_LABELS  </h1>
-              {this.ShowATable('DepV_WITH_LABELS', true)}
-              <h1> DepVP_WITH_LABELS  </h1>
-              {this.ShowATable('DepVP_WITH_LABELS', true)}
-              <h1> DepM_WITH_LABELS  </h1>
-              {this.ShowATable('DepM_WITH_LABELS', true)}
-              <h1> DEP_COREF  </h1>
-              {this.ShowATable('DEP_COREF', true)}
-              <h1> DEP_COREF_WITH_PATH_BASED_LABELS  </h1>
-              {this.ShowATable('DEP_COREF_WITH_PATH_BASED_LABELS', true)}
+              </div>
+                <p id="explanationParagraph">
+                  Explanation: {this.state.tripleExplanation}
+                </p>
+            </Panel>
+              {this.showTripleSchema()}
             </Panel>
 
             <Panel>
               <Panel header="Concept Graph" bsStyle='success'>
               <div id="pairGraphMain">
-                <div>
-                  <div className="tree" id="pairGraph">
-                    <ul>
-                      <li>
-                        <span className="so-label" >
-                          {this.getRoleList(role_pairwise,0)}
-                        </span>
-                        {this.getAttributeList(attributes,0)}
-                      </li>
-                      <li>
-                        <span>
-                        {this.getQueryList()}
-                        </span>
-                      </li>
-                    </ul>
-                  </div>
+                <div className="tree" id="pairGraph">
+                  <ul>
+                    <li>
+                      <span className="so-label" >
+                        {this.getRoleList(role_pairwise,0)}
+                      </span>
+                      {this.getAttributeList(attributes,0)}
+                    </li>
+                    <li>
+                      <span>
+                      {this.getQueryList()}
+                      </span>
+                    </li>
+                  </ul>
                 </div>
-                <Button bsStyle="success" bsSize="small" onClick={this.queryHandle.bind(this, 0)}>
+                <Button bsStyle="success" bsSize="small" onClick={this.queryHandle.bind(this, 0, 0)}>
                   Query
                 </Button>
               </div>
