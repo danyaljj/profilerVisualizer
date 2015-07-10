@@ -23,7 +23,7 @@ class SampleService extends Directives with SprayJsonSupport {
               println("Label = " + label)
               println("entityType = " + entityType)
               println("queryType = " + queryType)
-              val host = "ec2-54-205-18-221.compute-1.amazonaws.com"
+              val host = "ec2-54-159-162-161.compute-1.amazonaws.com"
               val port = 27017
               val profilerClient = new ProfilerClient(host, port)
 
@@ -35,6 +35,10 @@ class SampleService extends Directives with SprayJsonSupport {
                 case 1 => SchemaCategories.DEPENDENCY
                 case 2 => SchemaCategories.TRIPLE
               }
+
+              //val profiles = ProfileLocalCacher.queryProfileWithCaching(querySurface, queryLabel,
+              //  queryEntity, querySchemaCategory, 20)
+
               //println("querySchemaCategory = " + querySchemaCategory)
               val profiles = profilerClient.queryProfiles(querySurface, queryLabel, queryEntity, querySchemaCategory, 20)
               println("number of profiles found = " + profiles.size())

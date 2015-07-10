@@ -57,6 +57,8 @@ object HttpServer extends SimpleRoutingApp with Ai2Directives {
     // src/main/resources/application.conf
     val port = config[Int](s"$Package.$ApplicationName.http-server.port")
 
+    //ProfileLocalCacher.unpickleFromFile()
+
     // Create an instance of the service
     val sampleService = new SampleService()
 

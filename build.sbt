@@ -12,7 +12,8 @@ libraryDependencies ++= Seq(
   allenAiCommon,
   allenAiWebapp,
   sprayJson,
-  "edu.illinois.cs.cogcomp" % "profiler-client" % "2.0-SNAPSHOT"
+  "edu.illinois.cs.cogcomp" % "profiler-client" % "2.0-SNAPSHOT",
+  "org.scala-lang.modules" %% "scala-pickling" % "0.10.1"
 )
 
 javaOptions ++= Seq(s"-Dlogback.appname=${name.value}")

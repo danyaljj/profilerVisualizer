@@ -6,6 +6,16 @@ const Qwest = require('qwest');
 var aboutGlobal = 'ABOUT TODO';
 var helpGloabl = 'HELP TODO';
 
+var role_pairwise = [
+// basic
+  'before', 'adjacent before', 'nearest before',
+  'after', 'adjacent after', 'nearest after',
+  'immediately before', 'immediately after',
+  'same span', 'contained in',
+// dependency
+  'dependency'
+];
+
 var role_simple_before = [
   'before', 'adjacent before', 'nearest before'
 ];
@@ -135,20 +145,36 @@ var tripleSchema = [
 class ProfilerVisualizer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {  panelState: 1,
-                    panelContent: " ",
-                    panelTitle: " ",
-                    queryContent: " ",
-                    queryResult: "",
-                    helpContent: helpGloabl,
-                    aboutContent: aboutGlobal,
-                    profilerType: 0,
-                    schemaType: 1,
-                    surfacePlaceHolder: 'Enter a Verb',
-                    labelPlaceHolder: 'Label (Verb Sense)',
-                    surfaceString: '',
-                    labelString: '',
-                    maxItemsPerTable: 20
+    this.state = {
+      // panel
+      panelState: 1,
+      panelContent: " ",
+      panelTitle: " ",
+      queryContent: " ",
+      helpContent: helpGloabl,
+      aboutContent: aboutGlobal,
+
+      // results of query
+      queryResult: "",
+      queryResultPairwise: "",
+      queryResultTriples: "",
+      queryResultQuaduple: "",
+      queryResult6Tuple: "",
+      queryResult7Tuple: "",
+
+      // query information
+      profilerType: 0,
+      schemaType: 1,
+      surfacePlaceHolder: 'Enter a Verb',
+      labelPlaceHolder: 'Label (Verb Sense)',
+      surfaceString: '',
+      labelString: '',
+      maxItemsPerTable: 20,
+      pairwiseExplanation: '',
+
+      // pairwise
+      pairwiseAttribute: 0,
+      pairwiseRole: 0
     };
   }
 
@@ -202,9 +228,11 @@ class ProfilerVisualizer extends React.Component {
     return sortedMap;
   }
 
-  ShowATable(schemaName) {
+  ShowATable(schemaName, simple) {
     if ( Array.isArray(this.state.queryResult) && schemaName in this.state.queryResult[0].counts ) {
       var tableContent1 = this.state.queryResult[0].counts[schemaName];
+      console.log("schemaName = " + schemaName);
+      console.log("tableContent1 = " + tableContent1);
       var tableContent = this.sortMapByValue(tableContent1);
       var resultAll =  Object.keys( tableContent );
       var countNums = resultAll.map(function(keyElement) { return tableContent[keyElement]});
@@ -340,31 +368,45 @@ class ProfilerVisualizer extends React.Component {
   }
 
 
-  getRoleList(_role) {
+  getRoleList(_role, type) {
     var MenuItem = require('react-bootstrap').MenuItem;
     var DropdownButton = require('react-bootstrap').DropdownButton;
 
     var _items = _role.map(function(role, i) {
-      return ( <MenuItem>{role}</MenuItem> );
+      return ( <MenuItem eventKey={i}>{role}</MenuItem> );
     });
     return (
-        <DropdownButton bsStyle='link' title='Role' key='1'  bsSize='xsmall'>
+        <DropdownButton ref='roleType' bsStyle='link' title='Role' key='1'  bsSize='xsmall' onSelect={this.handleSelectRoleList.bind(this, type)}>
           {_items}
         </DropdownButton>
     );
   }
 
-  getAttributeList(_att) {
+  handleSelectRoleList(type,key) {
+    console.log('inside handleSelectRoleList');
+    console.log(key);
+    console.log('type = ' + type);
+    this.setState({ pairwiseRole: key });
+  }
+
+  getAttributeList(_att, type) {
     var MenuItem = require('react-bootstrap').MenuItem;
     var DropdownButton = require('react-bootstrap').DropdownButton;
     var _items =_att.map(function(att, i) {
-      return ( <MenuItem>{att}</MenuItem> );
+      return ( <MenuItem eventKey={i}>{att}</MenuItem> );
     });
     return (
-        <DropdownButton bsStyle='primary' title='Attribute' key='1'  bsSize='xsmall'>
+        <DropdownButton bsStyle='primary' title='Attribute' key='1'  bsSize='xsmall' onSelect={this.handleSelectAttributeList.bind(this,type)}>
           {_items}
         </DropdownButton>
     );
+  }
+
+  handleSelectAttributeList(type,key) {
+    console.log('inside handleSelectAttributeList');
+    console.log(key);
+    console.log('type = ' + type);
+    this.setState({ pairwiseAttribute: key });
   }
 
   entityClicked() {
@@ -406,7 +448,7 @@ class ProfilerVisualizer extends React.Component {
       wikiDisabled = 'disabled';
 
     return (
-        <DropdownButton bsStyle='primary' title='Attribute' key='1'  bsSize='xsmall'>
+        <DropdownButton bsStyle='danger' title='Attribute' key='1'  bsSize='xsmall'>
           <MenuItem eventKey='1'>
             <ButtonToolbar>
               <ButtonGroup bsSize='xsmall'>
@@ -429,6 +471,110 @@ class ProfilerVisualizer extends React.Component {
     this.setState({labelString: e.target.value});
   }
 
+  showPairwiseSchema() {
+    console.log('this.state.pairwiseAttribute = ' + this.state.pairwiseAttribute);
+    console.log('this.state.pairwiseRole = ' + this.state.pairwiseRole);
+
+    var att = attributes[this.state.pairwiseAttribute];
+    var role = role_pairwise[this.state.pairwiseRole];
+    console.log('att = ' + att);
+    console.log('role = ' + role);
+
+    var schema = '';
+    var schemaSimple = '';
+
+    if(role === 'same span' && att === 'NER' )
+      schemaSimple = 'NER_SAME_SPAN';
+    else if(role === 'after' && att === 'NER' )
+      schemaSimple = 'NER_AFTER';
+    else if(role === 'before' && att === 'NER' )
+      schemaSimple = 'NER_BEFORE';
+    else if(role === 'nearest before' && att === 'NER' )
+      schemaSimple = 'NER_NEAREST_BEFORE';
+    else if(role === 'nearest after' && att === 'NER' )
+      schemaSimple = 'NER_NEAREST_AFTER';
+    else if(role === 'adjacent before' && att === 'NER' )
+      schemaSimple = 'NER_ADJACENT_BEFORE';
+    else if(role === 'adjacent after' && att === 'NER' )
+      schemaSimple = 'NER_ADJACENT_AFTER';
+    else if(role === 'before' && att === 'Noun Phrase' )
+      schemaSimple = 'NPB';
+    else if(role === 'nearest before'  && att === 'Noun Phrase' )
+      schemaSimple = 'NNPB';
+    else if(role === 'nearest after'  && att === 'Noun Phrase' )
+      schemaSimple = 'NNPA';
+    else if(role === 'immediately after'  && att === 'Noun Phrase' )
+      schemaSimple = 'NPIA';
+    else if(role === 'immediately before'  && att === 'Noun Phrase' )
+      schemaSimple = 'NPIB';
+    else if(role === 'contained in'  && att === 'Noun Phrase' )
+      schemaSimple = 'NPC';
+    else if(role === 'after'  && att === 'Noun Phrase' )
+      schemaSimple = 'NPA';
+    else if(role === 'before'  && att === 'Noun Phrase' )
+      schemaSimple = 'NPB';
+    else if(role === 'nearest before'  && att === 'Noun' )
+      schemaSimple = 'NNB';
+    else if(role === 'nearest after'  && att === 'Noun' )
+      schemaSimple = 'NNA';
+    else if(role === 'after'  && att === 'Verb Phrase' )
+      schemaSimple = 'VPA';
+    else if(role === 'before'  && att === 'Verb Phrase' )
+      schemaSimple = 'VPB';
+    else if(role === 'nearest after'  && att === 'Verb Phrase' )
+      schemaSimple = 'NVPA';
+    else if(role === 'nearest before'  && att === 'Verb Phrase' )
+      schemaSimple = 'NVPB';
+    else if(role === 'immediately before'  && att === 'Verb Phrase' )
+      schemaSimple = 'VPIB';
+    else if(role === 'immediately after'  && att === 'Verb Phrase' )
+      schemaSimple = 'VPIA';
+    else if(role === 'nearest after'  && att === 'Verb Phrase' )
+      schemaSimple = 'NVPA';
+    else if(role === 'after'  && att === 'Verb Phrase' )
+      schemaSimple = 'VPA';
+    else if(role === 'after'  && att === 'Entity' )
+      schema = 'EA';
+    else if(role === 'before'  && att === 'Entity' )
+      schema = 'EB';
+
+//  Dependency
+    else if(role === 'dependency'  && att === 'Noun' )
+      schema = 'DepN';
+    else if(role === 'dependency'  && att === 'Noun Phrase' )
+      schema = 'DepNP';
+    else if(role === 'dependency'  && att === 'Verb' )
+      schema = 'DepV';
+    else if(role === 'dependency'  && att === 'Modifier' )
+      schema = 'DepM';
+    else if(role === 'dependency'  && att === 'NER' )
+      schema = 'DepNER_WITH_LABELS';
+    else if(role === 'dependency'  && att === 'Raw Text' )
+      schema = 'DepLabel';
+
+    //<h1>Nearest Noun After </h1>
+    //{this.ShowASimpleTable('NNA')}
+    //<h1> NER_AFTER1  </h1>
+    //{this.ShowASimpleTable('NER_AFTER')}
+    //<h1> Entity After </h1>
+    //{this.ShowATable('EA', true)};
+    //<h1> Entity Before </h1>
+    //{this.ShowATable('EB', true)}
+
+    //schema = 'NPA';
+
+    var output = '';
+    if ( schema!='' )
+      output = this.ShowATable(schema, true);
+    if ( schemaSimple!='' )
+      output = this.ShowASimpleTable(schemaSimple, true);
+    return (
+      <div>
+        {output}
+      </div>
+    );
+  }
+
   render() {
     var Button = require('react-bootstrap').Button;
     var ButtonGroup = require('react-bootstrap').ButtonGroup;
@@ -441,6 +587,9 @@ class ProfilerVisualizer extends React.Component {
     var Panel = require('react-bootstrap').Panel;
     var DropdownButton = require('react-bootstrap').DropdownButton;
     var Input = require('react-bootstrap').Input;
+
+    //console.log("value of the ref = roleType: " + this.refs.roleType.getDOMNode());
+    //console.log("value of the ref = roleType: " + React.findDOMNode(this.refs.roleType));
 
     return (
       <div id="mainDiv">
@@ -460,23 +609,41 @@ class ProfilerVisualizer extends React.Component {
               </Panel>
             </div>
 
-
             <Panel>
               <div className="tree">
                 <ul>
                   <li>
-                    <ul>
-                      <li><a href="#">Grand Child</a></li>
-                      <li><a href="#">Grand Child</a></li>
-                      <li><a href="#">Grand Child</a></li>
-                    </ul>
+                     <span className="so-label" >
+                       {this.getRoleList(role_simple_before)}
+                     </span>
+                    {this.getAttributeList(attributes)}
                   </li>
                   <li>
-                    <ul>
-                      <li><a href="#">Grand Child</a></li>
-                      <li><a href="#">Grand Child</a></li>
-                      <li><a href="#">Grand Child</a></li>
-                    </ul>
+                    <span className="so-label" >
+                       {this.getRoleList(role_simple_before)}
+                    </span>
+                    {this.getAttributeList(attributes)}
+                  </li>
+                  <li>
+                    <span className="so-label" >
+                       {this.getRoleList(role_simple_before)}
+                    </span>
+                    {this.getAttributeList(attributes)}
+                  </li>
+                  <li>
+                    <span className="so-label" >
+                       {this.getRoleList(role_simple_before)}
+                    </span>
+                    {this.getAttributeList(attributes)}
+                  </li>
+                  <li>
+                    <span className="so-label" >
+                       {this.getRoleList(role_simple_before)}
+                    </span>
+                    {this.getAttributeList(attributes)}
+                  </li>
+                  <li>
+                    {this.getAttributeList(attributes)}
                   </li>
                 </ul>
             </div>
@@ -484,8 +651,43 @@ class ProfilerVisualizer extends React.Component {
                 Query
               </Button>
 
+              <h1> TRIPLE_BEFORE  </h1>
+                {this.ShowATable('TRIPLE_BEFORE', true)}
+              <h1> TRIPLE_AFTER  </h1>
+              {this.ShowATable('TRIPLE_AFTER', true)}
+              <h1> TRIPLE_BEFORE_NER_LABEL  </h1>
+              {this.ShowATable('TRIPLE_BEFORE_NER_LABEL', true)}
+              <h1> TRIPLE_AFTER_NER_LABEL  </h1>
+              {this.ShowATable('TRIPLE_AFTER_NER_LABEL', true)}
+              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION  </h1>
+              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION', true)}
               <h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION  </h1>
-              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION')}
+              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION', true)}
+              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT  </h1>
+              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', true)}
+              <h1> TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT  </h1>
+              {this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', true)}
+
+              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH  </h1>
+              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', true)}
+              <h1> TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH  </h1>
+              {this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', true)}
+
+
+              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION  </h1>
+              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION', true)}
+              <h1> TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION  </h1>
+              {this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION', true)}
+
+              <h1> TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT  </h1>
+              {this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', true)}
+              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT  </h1>
+              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', true)}
+
+              <h1> TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH  </h1>
+              {this.ShowATable('TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH', true)}
+              <h1> TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH  </h1>
+              {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH', true)}
 
             </Panel>
 
@@ -509,31 +711,49 @@ class ProfilerVisualizer extends React.Component {
 
               <h1> DepN  </h1>
               {this.ShowASimpleTable('DepN')}
+              <h1> DepNP  </h1>
+              {this.ShowASimpleTable('DepNP')}
               <h1> DepNER  </h1>
               {this.ShowASimpleTable('DepNER')}
               <h1> DepV  </h1>
               {this.ShowASimpleTable('DepV')}
+              <h1> DepVP  </h1>
+              {this.ShowASimpleTable('DepVP')}
+              <h1> DepM  </h1>
+              {this.ShowASimpleTable('DepM')}
               <h1> DepLabel  </h1>
-              {this.ShowATable('DepLabel')}
+              {this.ShowATable('DepLabel', true)}
+              <h1> DepWithLabels  </h1>
+              {this.ShowATable('DepWithLabels', true)}
               <h1> DepNER_WITH_LABELS  </h1>
-              {this.ShowATable('DepNER_WITH_LABELS')}
+              {this.ShowATable('DepNER_WITH_LABELS', true)}
               <h1> DepN_WITH_LABELS  </h1>
-              {this.ShowATable('DepN_WITH_LABELS')}
+              {this.ShowATable('DepN_WITH_LABELS', true)}
+              <h1> DepNP_WITH_LABELS  </h1>
+              {this.ShowATable('DepNP_WITH_LABELS', true)}
               <h1> DepV_WITH_LABELS  </h1>
-              {this.ShowATable('DepV_WITH_LABELS')}
+              {this.ShowATable('DepV_WITH_LABELS', true)}
+              <h1> DepVP_WITH_LABELS  </h1>
+              {this.ShowATable('DepVP_WITH_LABELS', true)}
+              <h1> DepM_WITH_LABELS  </h1>
+              {this.ShowATable('DepM_WITH_LABELS', true)}
+              <h1> DEP_COREF  </h1>
+              {this.ShowATable('DEP_COREF', true)}
+              <h1> DEP_COREF_WITH_PATH_BASED_LABELS  </h1>
+              {this.ShowATable('DEP_COREF_WITH_PATH_BASED_LABELS', true)}
             </Panel>
 
-
             <Panel>
+              <Panel header="Concept Graph" bsStyle='success'>
               <div id="pairGraphMain">
                 <div>
                   <div className="tree" id="pairGraph">
                     <ul>
                       <li>
                         <span className="so-label" >
-                          {this.getRoleList(role_simple_before)}
+                          {this.getRoleList(role_pairwise,0)}
                         </span>
-                        {this.getAttributeList(attributes)}
+                        {this.getAttributeList(attributes,0)}
                       </li>
                       <li>
                         <span>
@@ -546,22 +766,13 @@ class ProfilerVisualizer extends React.Component {
                 <Button bsStyle="success" bsSize="small" onClick={this.queryHandle.bind(this, 0)}>
                   Query
                 </Button>
-                </div>
-
-              <Panel header="Concept Graph" bsStyle='success'>
-                HEre is some explanation
+              </div>
+                <p id="explanationParagraph">
+                  Explanation: {this.state.pairwiseExplanation}
+                </p>
               </Panel>
-
-              <h1>Nearest Noun After </h1>
-              {this.ShowASimpleTable('NNA')}
-              <h1> NER_AFTER1  </h1>
-              {this.ShowASimpleTable('NER_AFTER')}
-              <h1> Entity After </h1>
-              {this.ShowATable('EA')};
-              <h1> Entity Before </h1>
-              {this.ShowATable('EB')};
+              {this.showPairwiseSchema()}
             </Panel>
-
           </section>
         </main>
       </div>
