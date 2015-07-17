@@ -94,108 +94,108 @@ var sixTupleSchema = [
 ];
 
 var schemaBasic = [
-    ['NER at the same span', 'NER_SAME_SPAN'],
-    ['NER after', 'NER_AFTER'],
-    ['NER before', 'NER_BEFORE'],
-    ['nearst NER before', 'NER_NEAREST_BEFORE'],
-    ['nearest NER after', 'NER_NEAREST_AFTER'],
-    ['adjacent NER before', 'NER_ADJACENT_BEFORE'],
-    ['adjacent NER after', 'NER_ADJACENT_AFTER'],
-    ['Noun Phrase before', 'NPB'],
-    ['nearest Noun Phrase before ', 'NNPB'],
-    ['nearest Noun Phrase after', 'NNPA'],
-    ['Noun Phrase immediate after', 'NPIA'],
-    ['Noun Phrase immediately before', 'NPIB'],
-    ['Noun Phrase contained in', 'NPC'],
-    ['Noun Phrase after', 'NPA'],
-    ['Noun Phrase before', 'NNB'],
-    ['nearest Noun after', 'NNA'],
-    ['nearest verb before', 'NVB'],
-    ['Verb Phrase after', 'NVA'],
-    ['Verb Phrase before', 'VPB'],
-    ['nearest Verb Phrase before', 'NVPB'],
-    ['Verb Phrase immediately before', 'VPIB'],
-    ['Verb Phrase immediately after', 'VPIA'],
-    ['nearest Verb Phrase after', 'NVPA'],
-    ['Verb Phrase after', 'VPA'],
-    ['Modifier', 'MOD'],
-    ['Entity before', 'EB'],
-    ['Entity after', 'EA'],
-    ['Pair of nearest NERs (before and after)', 'NEAREST_NER_PAIR'],
-    ['Pair of nearest POSs (before and after)', 'NEAREST_POS_PAIR']
+    ['NER_SAME_SPAN', 'NER at the same span'],
+    ['NER_AFTER', 'NER after'],
+    ['NER_BEFORE', 'NER before'],
+    ['NER_NEAREST_BEFORE', 'nearst NER before'],
+    ['NER_NEAREST_AFTER', 'nearest NER after'],
+    ['NER_ADJACENT_BEFORE', 'adjacent NER before'],
+    ['NER_ADJACENT_AFTER', 'adjacent NER after'],
+    ['NPB', 'Noun Phrase before'],
+    ['NNPB', 'nearest Noun Phrase before '],
+    ['NNPA', 'nearest Noun Phrase after'],
+    ['NPIA', 'Noun Phrase immediate after'],
+    ['NPIB', 'Noun Phrase immediately before'],
+    ['NPC', 'Noun Phrase contained in'],
+    ['NPA', 'Noun Phrase after'],
+    ['NNB', 'Noun Phrase before'],
+    ['NNA', 'nearest Noun after'],
+    ['NVB', 'nearest verb before'],
+    ['NVA', 'Verb Phrase after'],
+    ['VPB', 'Verb Phrase before'],
+    ['NVPB', 'nearest Verb Phrase before'],
+    ['VPIB', 'Verb Phrase immediately before'],
+    ['VPIA', 'Verb Phrase immediately after'],
+    ['NVPA', 'nearest Verb Phrase after'],
+    ['VPA', 'Verb Phrase after'],
+    ['MOD', 'Modifier'],
+    ['EB', 'Entity before'],
+    ['EA', 'Entity after'],
+    ['NEAREST_NER_PAIR', 'Pair of nearest NERs (before and after)'],
+    ['NEAREST_POS_PAIR', 'Pair of nearest POSs (before and after)']
 ];
 
 var schemaDep = [
-    ['Dependant (with label)', 'DepWithLabels'],
-    ['Dependant Noun', 'DepN'],
-    ['Dependant Noun (with label)', 'DepN_WITH_LABELS'],
-    ['Dependant Noun Phrase', 'DepNP'],
-    ['Dependant Noun Phrase (with label)', 'DepNP_WITH_LABELS'],
-    ['Dependant Verb', 'DepV'],
-    ['Dependant Verb (with label)', 'DepV_WITH_LABELS'],
-    ['Dependant Verb Phrase', 'DepVP'],
-    ['Dependant Verb Phrase (with label)', 'DepVP_WITH_LABELS'],
-    ['Dependant Mention', 'DepM'],
-    ['Dependant Mention (with label)', 'DepM_WITH_LABELS'],
-    ['Dependant NER', 'DepNER'],
-    ['Dependant NER (with label)', 'DepNER_WITH_LABELS'],
-    ['Dependant co-referred word', 'DEP_COREF'],
-    ['Dependant co-referred word (with labels)', 'DEP_COREF_WITH_PATH_BASED_LABELS']
+    ['DepWithLabels', 'Dependant (with label)'],
+    ['DepN', 'Dependant Noun'],
+    ['DepN_WITH_LABELS', 'Dependant Noun (with label)'],
+    ['DepNP', 'Dependant Noun Phrase'],
+    ['DepNP_WITH_LABELS', 'Dependant Noun Phrase (with label)'],
+    ['DepV', 'Dependant Verb'],
+    ['DepV_WITH_LABELS', 'Dependant Verb (with label)'],
+    ['DepVP', 'Dependant Verb Phrase'],
+    ['DepVP_WITH_LABELS', 'Dependant Verb Phrase (with label)'],
+    ['DepM', 'Dependant Mention'],
+    ['DepM_WITH_LABELS', 'Dependant Mention (with label)'],
+    ['DepNER', 'Dependant NER'],
+    ['DepNER_WITH_LABELS', 'Dependant NER (with label)'],
+    ['DEP_COREF', 'Dependant co-referred word'],
+    ['DEP_COREF_WITH_PATH_BASED_LABELS', 'Dependant co-referred word (with labels)']
 ];
 
 var tripleSchema = [
-    ['triple before', 'TRIPLE_BEFORE'],
-    ['triple after', 'TRIPLE_AFTER'],
-    ['triple before (NER labels)', 'TRIPLE_BEFORE_NER_LABEL'],
-    ['triple after (NER labels)', 'TRIPLE_AFTER_NER_LABEL'],
-    ['triple before with coref between subj-subj', 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION'],
-    ['triple after with coref between subj-subj', 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION'],
-    ['triple before with coref between subj-obj', 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION'],
-    ['triple after with coref between subj-obj', 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION'],
-    ['triple before with coref between obj-subj', 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_NO_AGGREGATION'],
-    ['triple after with coref between obj-subj', 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_NO_AGGREGATION'],
-    ['triple before with coref between obj-obj', 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION'],
-    ['triple after with coref between obj-obj', 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION'],
-    ['triple before with coref between subj-subj', 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVEE_OBJ_SUBJ_NO_AGGREGATION'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_SUBJ_NO_AGGREGATION'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_OBJ_NO_AGGREGATION'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_OBJ_NO_AGGREGATION'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_NO_AGGREGATION'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_NO_AGGREGATION'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVEE_OBJ_SUBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_SUBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_OBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_OBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_REMOVE_COREFED_ELEMENT'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVEE_OBJ_SUBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_SUBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_OBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_OBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_REMOVE_BOTH'],
-    ['', 'TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_REMOVE_BOTH']
+    ['TRIPLE_BEFORE', 'triple before'],
+    ['TRIPLE_AFTER', 'triple after'],
+    ['TRIPLE_BEFORE_NER_LABEL', 'triple before (NER labels)'],
+    ['TRIPLE_AFTER_NER_LABEL', 'triple after (NER labels)'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION', 'triple before with coref between subj-subj'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION', 'triple after with coref between subj-subj'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION', 'triple before with coref between subj-obj'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION', 'triple after with coref between subj-obj'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_NO_AGGREGATION', 'triple before with coref between obj-subj'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_NO_AGGREGATION', 'triple after with coref between obj-subj'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION', 'triple before with coref between obj-obj'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION', 'triple after with coref between obj-obj'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', 'triple before with coref between subj-subj'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVEE_OBJ_SUBJ_NO_AGGREGATION', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_SUBJ_NO_AGGREGATION', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_OBJ_NO_AGGREGATION', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_OBJ_NO_AGGREGATION', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_NO_AGGREGATION', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_NO_AGGREGATION', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVEE_OBJ_SUBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_SUBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_OBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_OBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_REMOVE_COREFED_ELEMENT', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVEE_OBJ_SUBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_SUBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_OBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_OBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_REMOVE_BOTH', '']
 ];
 
 class ProfilerVisualizer extends React.Component {
@@ -1221,21 +1221,21 @@ class ProfilerVisualizer extends React.Component {
         console.log('logging from the query view ');
         console.log(this.state.profilerType);
 
-        var categories = [];
-        for (var i = 0; i < schemaBasic.length; i++) {
-            categories.push(<MenuItem eventKey='1'>{schemaBasic[i][0]}</MenuItem>);
-        }
-        if (this.state.profilerType == 1) { // wiki
-        }
-        else { // verb
-            console.log('addinng the verb schemas');
-            for (i = 0; i < schemaDep.length; i++) {
-                categories.push(<MenuItem eventKey='1'>{schemaDep[i][0]}</MenuItem>);
-            }
-            for (i = 0; i < tripleSchema.length; i++) {
-                categories.push(<MenuItem eventKey='1'>{tripleSchema[i][0]}</MenuItem>);
-            }
-        }
+        //var categories = [];
+        //for (var i = 0; i < schemaBasic.length; i++) {
+        //    categories.push(<MenuItem eventKey='1'>{schemaBasic[i][0]}</MenuItem>);
+        //}
+        //if (this.state.profilerType == 1) { // wiki
+        //}
+        //else { // verb
+        //    console.log('addinng the verb schemas');
+        //    for (i = 0; i < schemaDep.length; i++) {
+        //        categories.push(<MenuItem eventKey='1'>{schemaDep[i][0]}</MenuItem>);
+        //    }
+        //    for (i = 0; i < tripleSchema.length; i++) {
+        //        categories.push(<MenuItem eventKey='1'>{tripleSchema[i][0]}</MenuItem>);
+        //    }
+        //}
 
         return ( <div>
             <Navbar brand='Query Configuration'>
