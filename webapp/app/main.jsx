@@ -463,7 +463,6 @@ class ProfilerVisualizer extends React.Component {
         //}
     }
 
-
     getRoleList(_role, type, id) {
         var MenuItem = require('react-bootstrap').MenuItem;
         var DropdownButton = require('react-bootstrap').DropdownButton;
@@ -1268,20 +1267,6 @@ class ProfilerVisualizer extends React.Component {
             {this.ShowATable('DEP_COREF', 2)}
             <h1> DEP_COREF_WITH_PATH_BASED_LABELS  </h1>
             {this.ShowATable('DEP_COREF_WITH_PATH_BASED_LABELS', 2)}
-            <h1> TRIPLE_BEFORE  </h1>
-            {this.ShowATable('TRIPLE_BEFORE', 3)}
-            <h1> TRIPLE_AFTER  </h1>
-            {this.ShowATable('TRIPLE_AFTER', 3)}
-            <h1> TRIPLE_BEFORE_NER_LABEL  </h1>
-            {this.ShowATable('TRIPLE_BEFORE_NER_LABEL', 3)}
-            <h1> TRIPLE_AFTER_NER_LABEL  </h1>
-            {this.ShowATable('TRIPLE_AFTER_NER_LABEL', 3)}
-            <h1> TRIPLE_BEFORE_NER_LABEL  </h1>
-            {this.ShowATable('TRIPLE_BEFORE_NER_LABEL', 3)}
-            <h1> TRIPLE_AFTER_NER_LABEL  </h1>
-            {this.ShowATable('TRIPLE_AFTER_NER_LABEL', 3)}
-            <h1> TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION  </h1>
-            {this.ShowATable('TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION', 3)}
 
         </div> );
     }
