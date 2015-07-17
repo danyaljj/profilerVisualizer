@@ -9,16 +9,16 @@ import com.redis._
 object ProfilerCacherRedis {
   val host = "ec2-54-157-219-247.compute-1.amazonaws.com"
   val port = 27017
-  val profilerClient = new ProfilerClient(host, port)
+  lazy val profilerClient = new ProfilerClient(host, port)
   val r = new RedisClient("localhost", 6379)
   def queryProfileWithCaching(querySurface: String, queryLabel: String,
     queryEntity: String,
     querySchemaCategory: SchemaCategories,
     maxProfileContextSize: Int): String = {
     val key = querySurface + queryLabel + queryEntity + querySchemaCategory + maxProfileContextSize.toString
-    val profiles = if( false ) { //if (r.exists(key)) {
+    val profiles = if (r.exists(key)) {
       println("Reading from Redis! ")
-      r.get(key).toString
+      r.get(key).get.toString
     } else {
       println("Loading from server .... ")
       val tmp = profilerClient.queryProfiles(querySurface, queryLabel, queryEntity, querySchemaCategory, maxProfileContextSize)

@@ -23,9 +23,8 @@ class SampleService extends Directives with SprayJsonSupport {
               println("Label = " + label)
               println("entityType = " + entityType)
               println("queryType = " + queryType)
-              val host = "ec2-54-159-162-161.compute-1.amazonaws.com"
+              val host = "ec2-54-157-219-247.compute-1.amazonaws.com"
               val port = 27017
-              val profilerClient = new ProfilerClient(host, port)
 
               val queryEntity = if (entityType.toInt == 1) EntityTypes.WIKIFIER_ENTITY else EntityTypes.VERBSENSE_ENTITY
               val querySurface = if (surface == "") null else surface
@@ -36,17 +35,19 @@ class SampleService extends Directives with SprayJsonSupport {
                 case 2 => SchemaCategories.TRIPLE
               }
 
-              //val profiles = ProfileLocalCacher.queryProfileWithCaching(querySurface, queryLabel,
-              //  queryEntity, querySchemaCategory, 20)
+              val profiles = if( querySurface != null && queryLabel != null )
+                ProfilerCacherRedis.queryProfileWithCaching(querySurface, queryLabel,
+                  queryEntity, querySchemaCategory, 20)
+              else  ""
 
-              //println("querySchemaCategory = " + querySchemaCategory)
-              val profiles = profilerClient.queryProfiles(querySurface, queryLabel, queryEntity, querySchemaCategory, 20)
-              println("number of profiles found = " + profiles.size())
+//              lazy val profilerClient = new ProfilerClient(host, port)
+              //              //println("querySchemaCategory = " + querySchemaCategory)
+              //val profiles = profilerClient.queryProfiles(querySurface, queryLabel, queryEntity, querySchemaCategory, 20)
+//              println("number of profiles found = " + profiles.size())
 
               //            val scalaProfiles = Profiles.convertProfilesToScala(profiles)
               //            println("number of profiles in Scala = " + scalaProfiles.profiles.length)
 
-              // query here
               complete {
                 //ProfilerMsg("howdy")
                 //              println(scalaProfiles.toJson)
