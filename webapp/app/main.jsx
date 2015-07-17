@@ -86,11 +86,37 @@ var tripleSchema = [
 ];
 
 var quadrupleSchema = [
-
+    'DEP_COREF',
+    'DEP_COREF_WITH_PATH_BASED_LABELS'
 ];
 
 var sixTupleSchema = [
-
+    'TRIPLE_AFTER',
+    'TRIPLE_BEFORE',
+    'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION',
+    'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION',
+    'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION',
+    'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION',
+    'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_NO_AGGREGATION',
+    'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_NO_AGGREGATION',
+    'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION',
+    'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION',
+    'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT',
+    'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT',
+    'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT',
+    'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT',
+    'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT',
+    'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT',
+    'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT',
+    'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT',
+    'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH',
+    'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH',
+    'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH',
+    'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH',
+    'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH',
+    'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH',
+    'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH',
+    'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH'
 ];
 
 var schemaBasic = [
@@ -143,7 +169,7 @@ var schemaDep = [
     ['DEP_COREF_WITH_PATH_BASED_LABELS', 'Dependant co-referred word (with labels)']
 ];
 
-var tripleSchema = [
+var schemaTriple = [
     ['TRIPLE_BEFORE', 'triple before'],
     ['TRIPLE_AFTER', 'triple after'],
     ['TRIPLE_BEFORE_NER_LABEL', 'triple before (NER labels)'],
@@ -1190,7 +1216,8 @@ class ProfilerVisualizer extends React.Component {
         return (
             <div>
                 <Panel id="mainPanel" header="About">
-
+                    It is around 200GB in size, and it contains 3,636,263 profiles
+                    for Wikipedia entities and 313,156 profiles for Verbsense entities.
                 </Panel>
             </div>
         );
@@ -1205,8 +1232,10 @@ class ProfilerVisualizer extends React.Component {
         console.log('3 ... ');
         this.queryHandle(1, 2);
         console.log('4 ... ');
-        //this.queryHandle(2, 3);
-        console.log('5 ... ');
+        if( this.state.profilerType == 0 ) {
+            this.queryHandle(2, 3);
+            console.log('5 ... ');
+        }
     }
 
     queryView() {
@@ -1217,6 +1246,11 @@ class ProfilerVisualizer extends React.Component {
         var NavItem = require('react-bootstrap').NavItem;
         var DropdownButton = require('react-bootstrap').DropdownButton;
         var MenuItem = require('react-bootstrap').MenuItem;
+        var Panel = require('react-bootstrap').Panel;
+        var PanelGroup = require('react-bootstrap').PanelGroup;
+        var ListGroup = require('react-bootstrap').ListGroup;
+        var ListGroupItem = require('react-bootstrap').ListGroupItem;
+        var Label = require('react-bootstrap').Label;
 
         console.log('logging from the query view ');
         console.log(this.state.profilerType);
@@ -1237,6 +1271,22 @@ class ProfilerVisualizer extends React.Component {
         //    }
         //}
 
+        //var depTables = [];
+        //schemaDep.forEach(function(entry){
+        //    depTables.push( <div> {entry[0]} </div> )
+        //});
+
+        var helpPanelStyle = {
+            margin: "50px"
+        };
+        var helpPanelParagraphStyle = {
+            margin: "10px",
+            textAlign: "left"
+        };
+        var helpPanelItemizeStyle = {
+            margin: "40px",
+            textAlign: "left"
+        };
         return ( <div>
             <Navbar brand='Query Configuration'>
                 <Nav>
@@ -1253,10 +1303,57 @@ class ProfilerVisualizer extends React.Component {
                 bsStyle="success">
                 Query
             </Button>
+            <PanelGroup accordion>
+                <Panel style={helpPanelStyle} header='Quick guide' eventKey='1' bsStyle='danger'>
+                    <p style={helpPanelParagraphStyle}>
+                        The statistics that share an important common
+                        constituent are gathered into the same <strong>profiles</strong>.
+                        For example,
+                        all of the schema instances which contain the entity
+                        “Seattle” (the city) as one of their constituents are gathered in
+                        the profile of “Seattle” (the city). In order to query the profile of
+                        “Seattle” (the city):
+                    </p>
+                        <ol style={helpPanelItemizeStyle}>
+                            <li>Choose “Attribute", in the above navbar. </li>
+                            <li>Choose “Wiki Entity" as the type of profile (type of the key entity) </li>
+                            <li>Write “Seattle" as entity name</li>
+                            <li>Write
+                                “<a href="http://en.wikipedia.org/wiki/Seattle,_Washington">
+                                    http://en.wikipedia.org/wiki/Seattle,_Washington
+                                </a>" as label. Note that this link uniquely distinguished Seattle
+                                city from other entities which might have the same name. </li>
+                        </ol>
 
-            {this.showASetOfTables (pairwiseSchemaSimple, 0, 0)}
-            {this.showASetOfTables (pairwiseSchema, 0, 1)}
+                    <p style={helpPanelParagraphStyle}>
+                        Similarly we have profiles
+                        for “Seattle” (Seahawks), “grow” (sense 3, meaning “produce
+                        by cultivation”), “grow” (sense 4, meaning “go from child to
+                        adult”), and so on. As can be seen, there can be multiple pro-
+                        file types, e.g. (Wikipedia based) entities, (Propbank based)
+                        Verbsense [Kingsbury and Palmer, 2002], etc. 1 Each pro-
+                        file has a set of keys that uniquely identifies it. For example,
+                        profiles of Wikipedia entities are uniquely identified by both
+                        their surface form and the Wikipedia url. In doing this, we
+                        are able to disambiguate different entities that have the same
+                        surface form, as we show in the visualization.
+                        <br/> <br/>
+                        <Label bsStyle='danger'>Note</Label> The database of profiles is
+                        HUGE! We keep the full database on an Amazon EC2 server. To save money
+                        the server is often off, although many of the examples people have tried
+                        are cached in the visualizer. If you need to use this as resource in your
+                        project, <a href="http://web.engr.illinois.edu/~khashab2/">Daniel</a> might
+                        be able to turn on the server for you! :)
+                    </p>
+                </Panel>
+            </PanelGroup>
 
+            <br />
+
+            {this.showASetOfTables(pairwiseSchemaSimple, 0, 0)}
+            {this.showASetOfTables(pairwiseSchema, 0, 1)}
+            {this.showASetOfTables(quadrupleSchema, 2, 1)}
+            {this.showASetOfTables(sixTupleSchema, 3, 1)}
             <h1> DepN  </h1>
             {this.ShowASimpleTable('DepN', 0)}
             <h1> DepNP  </h1>
