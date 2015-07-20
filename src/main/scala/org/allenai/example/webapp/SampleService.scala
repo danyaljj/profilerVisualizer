@@ -42,10 +42,10 @@ class SampleService extends Directives with SprayJsonSupport {
                 ProfilerCacherRedis.queryProfileWithCaching(querySurface, queryLabel,
                   queryEntity, querySchemaCategory, 20)
 
-              //              lazy val profilerClient = new ProfilerClient(host, port)
+//              lazy val profilerClient = new ProfilerClient(host, port)
               //              //println("querySchemaCategory = " + querySchemaCategory)
-              //val profiles = profilerClient.queryProfiles(querySurface, queryLabel, queryEntity, querySchemaCategory, 20)
-              //              println("number of profiles found = " + profiles.size())
+//              val profiles = profilerClient.queryProfiles(querySurface, queryLabel, queryEntity, querySchemaCategory, 20)
+//                            println("number of profiles found = " + profiles.size())
 
               //            val scalaProfiles = Profiles.convertProfilesToScala(profiles)
               //            println("number of profiles in Scala = " + scalaProfiles.profiles.length)

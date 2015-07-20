@@ -7,7 +7,7 @@ import com.redis._
 /** Created by i-danielk on 7/16/15.
   */
 object ProfilerCacherRedis {
-  val host = "ec2-54-157-219-247.compute-1.amazonaws.com"
+  val host = "ec2-50-16-99-85.compute-1.amazonaws.com"
   val port = 27017
   lazy val profilerClient = new ProfilerClient(host, port)
   val r = new RedisClient("localhost", 6379)
@@ -16,6 +16,7 @@ object ProfilerCacherRedis {
     querySchemaCategory: SchemaCategories,
     maxProfileContextSize: Int): String = {
     val key = querySurface + queryLabel + queryEntity + querySchemaCategory + maxProfileContextSize.toString
+    println("query key = " + key)
     val profiles = if (r.exists(key)) {
       println("Reading from Redis! ")
       r.get(key).get.toString
@@ -29,8 +30,8 @@ object ProfilerCacherRedis {
     profiles
   }
 
-//  def main(args: Array[String]): Unit = {
-//
-//  }
+  //  def main(args: Array[String]): Unit = {
+  //
+  //  }
 
 }

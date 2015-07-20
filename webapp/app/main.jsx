@@ -537,6 +537,8 @@ class ProfilerVisualizer extends React.Component {
         var _items = _att.map(function (att, i) {
             return ( <MenuItem eventKey={i}>{att}</MenuItem> );
         });
+
+        var attribute = 'Attribute: ';
         return (
             <DropdownButton bsStyle='primary' title='Attribute' key='1' bsSize='xsmall'
                             onSelect={this.handleSelectAttributeList.bind(this,type, id)}>
@@ -775,12 +777,18 @@ class ProfilerVisualizer extends React.Component {
         }
 
         var output = '';
-        if (schema != '')
+        var explanation = '';
+        if (schema != '') {
             output = this.ShowATable(schema, type);
-        if (schemaSimple != '')
+            explanation = this.pairwiseExplanation(schema);
+        }
+        if (schemaSimple != '') {
             output = this.ShowASimpleTable(schemaSimple, type);
+            explanation = this.pairwiseExplanation(schemaSimple);
+        }
         return (
             <div>
+                {explanation}
                 {output}
             </div>
         );
@@ -1135,12 +1143,36 @@ class ProfilerVisualizer extends React.Component {
                             Query
                         </Button>
                     </div>
-                    <p id="explanationParagraph">
-                        Explanation: {this.state.pairwiseExplanation}
-                    </p>
                 </Panel>
                 {this.showPairwiseSchema()}
             </Panel>
+        );
+    }
+
+    noAlignmentError() {
+        var Alert = require('react-bootstrap').Alert;
+        var noSchemaError =
+            <Alert bsStyle='danger' onDismiss={this.handleAlertDismiss}>
+                <h4>Oh snap! We don't have this! </h4>
+                <p>This combination of role-attributes is not pre-calculated! :-(  Try other combinations!</p>
+            </Alert>;
+        return noSchemaError;
+    }
+
+    pairwiseExplanation(schemaName) {
+        var explanation = '';
+        if( schemaName === '' )
+            explanation = this.noAlignmentError();
+        else
+            explanation =  <h3> {schemaAllMap[schemaName]}  </h3>;
+
+        return (
+            <div>
+                {explanation}
+                <p id="explanationParagraph">
+                    Explanation:
+                </p>
+            </div>
         );
     }
 
@@ -1644,7 +1676,7 @@ class ProfilerVisualizer extends React.Component {
         var self = this;
         var schemaTables = [];
         tableTitles.forEach( function(schemaName) {
-                schemaTables.push( <h3> {schemaAllMap[schemaName]}  </h3> );
+                // schemaTables.push( <h3> {schemaAllMap[schemaName]}  </h3> );
                 if( tableType == 0 )
                     schemaTables.push( <div>  {self.ShowASimpleTable(schemaName, type)} </div> );
                 else if( tableType == 1 )

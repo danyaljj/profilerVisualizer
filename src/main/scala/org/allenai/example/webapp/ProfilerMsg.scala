@@ -14,15 +14,17 @@ case class ProfilerMsg(text: String)
 object ProfilerMsg {
   implicit val profilerMsg = jsonFormat1(ProfilerMsg.apply)
 //  def main(args: Array[String]) {
-//    val host = "ec2-54-159-162-161.compute-1.amazonaws.com"
+//    val host = "ec2-50-16-99-85.compute-1.amazonaws.com"
 //    val port = 27017
 //    val profilerClient = new ProfilerClient(host, port)
 //
-//    val profiles = profilerClient.queryProfiles("go", "01", EntityTypes.VERBSENSE_ENTITY, SchemaCategories.TRIPLE, 20)
+//    val profiles = profilerClient.queryProfiles("grow", "01", EntityTypes.VERBSENSE_ENTITY, SchemaCategories.BASIC, 20)
+//
 //    println(profiles.size())
+//    //profiles.forEach( profile =>  println( profile ) )
 //    println(profiles)
-//    val writer = new PrintWriter(new File("/Users/i-danielk/ideaProjects/tripleSchemaExample.txt"))
-//    writer.write(profiles.toString)
-//    writer.close()
+////    val writer = new PrintWriter(new File("/Users/i-danielk/ideaProjects/profileSample.txt"))
+////    writer.write(profiles.toString)
+////    writer.close()
 //  }
 }

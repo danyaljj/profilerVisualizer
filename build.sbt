@@ -1,5 +1,3 @@
-import org.allenai.plugins.CoreDependencies._
-
 organization := "org.allenai.example"
 
 name := "webapp"
@@ -9,9 +7,9 @@ description := "An example web application"
 enablePlugins(WebappPlugin)
 
 libraryDependencies ++= Seq(
-  allenAiCommon,
-  allenAiWebapp,
-  sprayJson,
+  "org.allenai.common" %% s"common-core" % "2015.04.01-0",
+  "org.allenai.common" %% s"common-webapp" % "2015.04.01-0",
+  "io.spray" %% "spray-json" % "1.3.1",
   "edu.illinois.cs.cogcomp" % "profiler-client" % "2.0-SNAPSHOT",
   "org.scala-lang.modules" %% "scala-pickling" % "0.10.1",
   "net.debasishg" %% "redisclient" % "3.0"
