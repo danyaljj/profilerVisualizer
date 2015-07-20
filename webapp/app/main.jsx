@@ -1039,9 +1039,59 @@ class ProfilerVisualizer extends React.Component {
         var Panel = require('react-bootstrap').Panel;
         var DropdownButton = require('react-bootstrap').DropdownButton;
         var Input = require('react-bootstrap').Input;
+        var PanelGroup = require('react-bootstrap').PanelGroup;
+
+        var helpPanelStyle = {
+            margin: "0px"
+        };
+        var helpPanelParagraphStyle = {
+            margin: "10px",
+            textAlign: "justify"
+        };
+        var helpPanelItemizeStyle = {
+            margin: "40px",
+            textAlign: "left"
+        };
 
         return (
             <div>
+
+                <PanelGroup accordion>
+                    <Panel style={helpPanelStyle} header='Quick guide' eventKey='1' bsStyle='danger'>
+                        <p style={helpPanelParagraphStyle}>
+                            In this page you can choose to query from each single knowledge schema graph.
+                            In each panel below, multiple graphs are shown. Each graph consists
+                            of <strong>nodes</strong> and <strong>edges</strong>. Each node is specified
+                            by an <strong>attribute </strong>, and each edge is specified by
+                            a <strong>role</strong>. You can specify role and attributes by clicking
+                            on edges and nodes on the graphs. In each graph there is a single pivote
+                            node with red color. The pivote node is specified by
+                            a <strong>surface string</strong> and a <strong>label</strong>.
+                            For example, "Seattle" as the surface string,
+                            and <a href="http://en.wikipedia.org/wiki/Seattle,_Washington">
+                                    http://en.wikipedia.org/wiki/Seattle,_Washington </a> as
+                            the label. The label helps us uniquely distinguish the all of the entities
+                            which might be associated with the surface string "Seattle"
+                            (such Seattle's football team). As an initial test:
+                        </p>
+
+                        <ol style={helpPanelItemizeStyle}>
+                            <li>Consider any of the concept graphs. </li>
+                            <li>Select its pivot node (the red node). </li>
+                            <li>Choose “Wiki" as the type of profile (type of the key entity) </li>
+                            <li>Write “Seattle" as entity name</li>
+                            <li>Write
+                                “<a href="http://en.wikipedia.org/wiki/Seattle,_Washington">
+                                    http://en.wikipedia.org/wiki/Seattle,_Washington
+                                </a>" as label. Note that this link uniquely distinguished Seattle
+                                city from other entities which might have the same name. </li>
+                            <li>Set the roles and attributes on the nodes and edges.</li>
+                            <li>Click on the "Query"</li>
+                        </ol>
+
+                    </Panel>
+                </PanelGroup>
+
                 <Panel>
                     <Panel header="Concept Graph" bsStyle='success'>
                         <div id="pairGraphMain">
@@ -1360,7 +1410,7 @@ class ProfilerVisualizer extends React.Component {
         //});
 
         var helpPanelStyle = {
-            margin: "10px"
+            margin: "0px"
         };
         var helpPanelParagraphStyle = {
             margin: "10px",
@@ -1441,14 +1491,15 @@ class ProfilerVisualizer extends React.Component {
             <Navbar brand='Query Configuration'>
                 <Nav>
                     {this.getQueryList()}
+                    <NavItem eventKey={1} href='#'>
+                        <Button
+                            onClick={this.handleQueryViewQuery.bind(this)} bsSize='xsmall'
+                            bsStyle='success'>
+                            Query
+                        </Button>
+                    </NavItem>
                 </Nav>
             </Navbar>
-
-            <Button
-                onClick={this.handleQueryViewQuery.bind(this)}
-                bsStyle="success">
-                Query
-            </Button>
 
             <PanelGroup accordion>
                 <Panel style={helpPanelStyle} header='Quick guide' eventKey='1' bsStyle='danger'>
