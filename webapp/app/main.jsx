@@ -77,13 +77,17 @@ var pairwiseSchemaSimple = [
 var pairwiseSchema = [
     // basic
     'EA',
-    'EB',
+    'EB'
+];
 
-    // deb
+var pairwiseSchemaDepSimple = [
     'DepN',
     'DepNP',
     'DepV',
-    'DepM',
+    'DepM'
+];
+
+var pairwiseSchemaDep = [
     'DepNER_WITH_LABELS',
     'DepLabel'
 ];
@@ -277,6 +281,7 @@ class ProfilerVisualizer extends React.Component {
             pairwiseAttribute: 0,
             pairwiseRole: 0,
             queryResultPairwise: "",
+            queryResultPairwiseDep: "",
             pairwiseExplanation: '',
 
             // 6 tuple
@@ -316,12 +321,14 @@ class ProfilerVisualizer extends React.Component {
             maxItemsPerTable: possibleMaxItemsInSchema[this.state.maxItemsPerTable],
             dnsAddress: this.state.dnsAddress
         }, {timeout: 50000, responseType: 'json'}).then(function (response) {
-                console.log('response.text = ' + response.text);
-                console.log('response = ' + JSON.parse(response.text));
+                //console.log('response.text = ' + response.text);
+                //console.log('response = ' + JSON.parse(response.text));
                 //self.setState({queryResult: JSON.parse(response.text)});
 
                 if (conceptGraphType === 0)
                     self.setState({queryResultPairwise: JSON.parse(response.text)});
+                if (conceptGraphType === 0.5)
+                    self.setState({queryResultPairwiseDep: JSON.parse(response.text)});
                 else if (conceptGraphType === 1)
                     self.setState({queryResultTriple: JSON.parse(response.text)});
                 else if (conceptGraphType === 2)
@@ -333,6 +340,11 @@ class ProfilerVisualizer extends React.Component {
                 //console.log(this.state.loading);
             }.bind(this)
         );
+    }
+
+    queryHandlePairwise() {
+        this.queryHandle(0, 0); // basic
+        this.queryHandle(1, 0.5); // dep
     }
 
     ShowARowOfTable(row) {
@@ -369,6 +381,8 @@ class ProfilerVisualizer extends React.Component {
         var qResult;
         if (queryType === 0)
             qResult = this.state.queryResultPairwise;
+        else if (queryType === 0.5)
+            qResult = this.state.queryResultPairwiseDep;
         else if (queryType === 1)
             qResult = this.state.queryResultTriple;
         else if (queryType === 2)
@@ -376,28 +390,39 @@ class ProfilerVisualizer extends React.Component {
         else if (queryType === 3)
             qResult = this.state.queryResultsixTuple;
 
-        console.log('ShowATable: qResult = ' + qResult);
+        console.log('schemaName = ' + schemaName);
+        console.log('ShowATable: qResult');
+        console.log(qResult);
 
         //if ( Array.isArray(this.state.queryResult) && schemaName in this.state.queryResult[0].counts ) {
         //  var tableContent1 = this.state.queryResult[0].counts[schemaName];
         if (Array.isArray(qResult) && schemaName in qResult[0].counts) {
             var tableContent1 = qResult[0].counts[schemaName];
-            console.log("schemaName = " + schemaName);
-            console.log("tableContent1 = " + tableContent1);
+            console.log("2. schemaName = " + schemaName);
+            console.log("tableContent1 = ");
+            console.log(tableContent1);
+            console.log('asdasd');
             var tableContent = this.sortMapByValue(tableContent1);
             var resultAll = Object.keys(tableContent);
+            console.log('resultAll.length = ' + resultAll.length);
+            console.log('resultAll = ' + resultAll);
             var countNums = resultAll.map(function (keyElement) {
                 return tableContent[keyElement]
             });
+            console.log('countNums = ' + countNums);
+            console.log('log');
             var titles = Object.keys(JSON.parse(resultAll[0]));
+            console.log('2.log');
             var contents = [];
-            for (var i = 0; i < possibleMaxItemsInSchema[this.state.maxItemsPerTable] && i < resultAll.length; i++) {
-                // console.log("i = " + i);
-                var rowMap = JSON.parse(resultAll[i]);
+            //console.log('possibleMaxItemsInSchema[this.state.maxItemsPerTable] = ' + possibleMaxItemsInSchema[this.state.maxItemsPerTable])
+            for (var it = 0; it < possibleMaxItemsInSchema[this.state.maxItemsPerTable] && it < resultAll.length; it++) {
+                //console.log('iteration = ' + i);
+                console.log("it = " + it);
+                var rowMap = JSON.parse(resultAll[it]);
                 var oneRow = titles.map(function (titleElement) {
                     return rowMap[titleElement]
                 });
-                oneRow.push(countNums[i]); // the frequency of the element
+                oneRow.push(countNums[it]); // the frequency of the element
                 contents.push(oneRow);
             }
             console.log('length of contents = ');
@@ -430,6 +455,8 @@ class ProfilerVisualizer extends React.Component {
         var qResult;
         if (queryType === 0)
             qResult = this.state.queryResultPairwise;
+        if (queryType === 0.5)
+            qResult = this.state.queryResultPairwiseDep;
         else if (queryType === 1)
             qResult = this.state.queryResultTriple;
         else if (queryType === 2)
@@ -487,24 +514,6 @@ class ProfilerVisualizer extends React.Component {
 
     handleSelectPanel(key) {
         this.setState({panelState: key});
-        //if (key == 1) {
-        //    this.queryView();
-        //    this.setState({
-        //        panelState: 1,
-        //        panelContent: '',
-        //        panelTitle: 'Query'
-        //    });
-        //}
-        //else if (key == 2) {
-        //    this.setState({
-        //        panelState: 2,
-        //        panelContent: this.state.helpContent,
-        //        panelTitle: 'Help'
-        //    });
-        //}
-        //else {
-        //    this.setState({panelContent: this.state.aboutContent, panelTitle: 'About'});
-        //}
     }
 
     getRoleList(_role, type, id) {
@@ -537,9 +546,6 @@ class ProfilerVisualizer extends React.Component {
     }
 
     handleSelectRoleList(type, id, key) {
-        console.log('inside handleSelectRoleList');
-        console.log(key);
-        console.log('type = ' + type);
         if (type === 0)
             this.setState({pairwiseRole: key});
         else if (type === 1)
@@ -561,9 +567,6 @@ class ProfilerVisualizer extends React.Component {
     }
 
     handleSelectAttributeList(type, id, key) {
-        console.log('inside handleSelectAttributeList');
-        console.log(key);
-        console.log('type = ' + type);
         if (type === 0)
             this.setState({pairwiseAttribute: key});
         else if (type === 1)
@@ -680,9 +683,6 @@ class ProfilerVisualizer extends React.Component {
     }
 
     showPairwiseSchema() {
-        //console.log('this.state.pairwiseAttribute = ' + this.state.pairwiseAttribute);
-        //console.log('this.state.pairwiseRole = ' + this.state.pairwiseRole);
-
         var att = attributes[this.state.pairwiseAttribute];
         var role = role_pairwise[this.state.pairwiseRole];
         //console.log('att = ' + att);
@@ -690,6 +690,8 @@ class ProfilerVisualizer extends React.Component {
 
         var schema = '';
         var schemaSimple = '';
+
+        var type = 0; // 0: basic  0.5: Dep
 
         if (role === 'same span' && att === 'NER')
             schemaSimple = 'NER_SAME_SPAN';
@@ -747,34 +749,36 @@ class ProfilerVisualizer extends React.Component {
             schema = 'EB';
 
 //  Dependency
-        else if (role === 'dependency' && att === 'Noun')
-            schema = 'DepN';
-        else if (role === 'dependency' && att === 'Noun Phrase')
-            schema = 'DepNP';
-        else if (role === 'dependency' && att === 'Verb')
-            schema = 'DepV';
-        else if (role === 'dependency' && att === 'Modifier')
-            schema = 'DepM';
-        else if (role === 'dependency' && att === 'NER')
+        else if (role === 'dependency' && att === 'Noun') {
+            schemaSimple = 'DepN';
+            type = 0.5;
+        }
+        else if (role === 'dependency' && att === 'Noun Phrase') {
+            schemaSimple = 'DepNP';
+            type = 0.5;
+        }
+        else if (role === 'dependency' && att === 'Verb') {
+            schemaSimple = 'DepV';
+            type = 0.5;
+        }
+        else if (role === 'dependency' && att === 'Modifier') {
+            schemaSimple = 'DepM';
+            type = 0.5;
+        }
+        else if (role === 'dependency' && att === 'NER') {
             schema = 'DepNER_WITH_LABELS';
-        else if (role === 'dependency' && att === 'Raw Text')
+            type = 0.5;
+        }
+        else if (role === 'dependency' && att === 'Raw Text') {
             schema = 'DepLabel';
-
-        //<h1>Nearest Noun After </h1>
-        //{this.ShowASimpleTable('NNA')}
-        //<h1> NER_AFTER1  </h1>
-        //{this.ShowASimpleTable('NER_AFTER')}
-        //<h1> Entity After </h1>
-        //{this.ShowATable('EA', true)};
-        //<h1> Entity Before </h1>
-        //{this.ShowATable('EB', true)}
-        //schema = 'NPA';
+            type = 0.5;
+        }
 
         var output = '';
         if (schema != '')
-            output = this.ShowATable(schema, 0);
+            output = this.ShowATable(schema, type);
         if (schemaSimple != '')
-            output = this.ShowASimpleTable(schemaSimple, 0);
+            output = this.ShowASimpleTable(schemaSimple, type);
         return (
             <div>
                 {output}
@@ -1124,7 +1128,7 @@ class ProfilerVisualizer extends React.Component {
                             </ul>
                         </div>
                         <Button bsStyle="success" bsSize="small"
-                                onClick={this.queryHandle.bind(this, 0, 0)}>
+                                onClick={this.queryHandlePairwise.bind(this)}>
                             Query
                         </Button>
                     </div>
@@ -1401,7 +1405,7 @@ class ProfilerVisualizer extends React.Component {
     handleQueryViewQuery() {
         console.log('Starting to query ... ');
         console.log('1 ... ');
-        this.queryHandle(0, 0);
+        this.queryHandlePairwise();
         console.log('2 ... ');
         this.queryHandle(0, 1);
         console.log('3 ... ');
@@ -1605,6 +1609,9 @@ class ProfilerVisualizer extends React.Component {
 
             {this.showASetOfTables(pairwiseSchemaSimple, 0, 0)}
             {this.showASetOfTables(pairwiseSchema, 0, 1)}
+            {this.showASetOfTables(pairwiseSchemaDepSimple, 0.5, 0)}
+            {this.showASetOfTables(pairwiseSchemaDep, 0.5, 1)}
+            {this.showASetOfTables(tripleSchema, 0, 1)}
             {this.showASetOfTables(quadrupleSchema, 2, 1)}
             {this.showASetOfTables(sixTupleSchema, 3, 1)}
 
@@ -1625,14 +1632,14 @@ class ProfilerVisualizer extends React.Component {
         var self = this;
         var schemaTables = [];
         tableTitles.forEach( function(schemaName) {
-                //schemaTables.push( <h3> {schemaAllMap[schemaName]}  </h3> );
+                schemaTables.push( <h3> {schemaAllMap[schemaName]}  </h3> );
                 if( tableType == 0 )
                     schemaTables.push( <div>  {self.ShowASimpleTable(schemaName, type)} </div> );
                 else if( tableType == 1 )
                     schemaTables.push( <div>  {self.ShowATable(schemaName, type)} </div> );
             }
         );
-        return (schemaTables);
+        return schemaTables;
     }
 
     render() {
