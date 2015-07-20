@@ -654,9 +654,18 @@ class ProfilerVisualizer extends React.Component {
         if (isWikiDisabled)
             wikiDisabled = 'disabled';
 
+
+        var doNothing = function() {
+            // This acts as a no-opt for the MenuItem onSelect callback
+        };
+
+        //return (
+        //    <DropdownButton bsStyle='danger' title='Attribute' bsSize='xsmall'>
+        //        <MenuItem onSelect={doNothing}>
+
         return (
             <DropdownButton bsStyle='danger' title='Attribute' key='1' bsSize='xsmall'>
-                <MenuItem eventKey='1'>
+                <MenuItem eventKey='1' MenuItem onSelect={doNothing}>
                     <ButtonToolbar>
                         <ButtonGroup bsSize='xsmall'>
                             <Button key='1' eventKey='1'
