@@ -1,3 +1,5 @@
+import org.allenai.plugins.CoreDependencies._
+
 organization := "org.allenai.example"
 
 name := "webapp"
