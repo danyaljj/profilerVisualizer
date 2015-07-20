@@ -1064,8 +1064,8 @@ class ProfilerVisualizer extends React.Component {
                             of <strong>nodes</strong> and <strong>edges</strong>. Each node is specified
                             by an <strong>attribute </strong>, and each edge is specified by
                             a <strong>role</strong>. You can specify role and attributes by clicking
-                            on edges and nodes on the graphs. In each graph there is a single pivote
-                            node with red color. The pivote node is specified by
+                            on edges and nodes on the graphs. In each graph there is a single pivot
+                            node with red color. The pivot node is specified by
                             a <strong>surface string</strong> and a <strong>label</strong>.
                             For example, "Seattle" as the surface string,
                             and <a href="http://en.wikipedia.org/wiki/Seattle,_Washington">
@@ -1088,6 +1088,14 @@ class ProfilerVisualizer extends React.Component {
                             <li>Set the roles and attributes on the nodes and edges.</li>
                             <li>Click on the "Query"</li>
                         </ol>
+
+                        <p style={helpPanelParagraphStyle}>
+                            Our current system contains two types of pivot entities: (1) Wiki entities
+                            (with Wiki urls as labels)
+                            (2) Verbs (with sense numbers as labels). You can change your previous query,
+                            by setting the surface to "grow", the label to "03" (produce by cultivation),
+                            and query it.
+                        </p>
 
                     </Panel>
                 </PanelGroup>
@@ -1115,9 +1123,6 @@ class ProfilerVisualizer extends React.Component {
                                 Query
                             </Button>
                         </div>
-                        <p id="explanationParagraph">
-                            Explanation: {this.state.pairwiseExplanation}
-                        </p>
                     </Panel>
                     {this.showPairwiseSchema()}
                 </Panel>
@@ -1149,9 +1154,6 @@ class ProfilerVisualizer extends React.Component {
                                 Query
                             </Button>
                         </div>
-                        <p id="explanationParagraph">
-                            Explanation: {this.state.tripleExplanation}
-                        </p>
                     </Panel>
                     {this.showTripleSchema()}
                 </Panel>
@@ -1189,9 +1191,6 @@ class ProfilerVisualizer extends React.Component {
                                 Query
                             </Button>
                         </div>
-                        <p id="explanationParagraph">
-                            Explanation: {this.state.tripleExplanation}
-                        </p>
                     </Panel>
                     {this.showQuadrupleSchema()}
                 </Panel>
@@ -1251,10 +1250,6 @@ class ProfilerVisualizer extends React.Component {
                             </Button>
                         </div>
                     </Panel>
-
-                    <p id="explanationParagraph">
-                        Explanation: {this.state.sixTupleExplanation}
-                    </p>
                     {this.showSixTupleSchema()}
                 </Panel>
             </div> );
@@ -1633,7 +1628,7 @@ class ProfilerVisualizer extends React.Component {
                         <TabbedArea defaultActiveKey={this.state.panelState}
                                     onSelect={this.handleSelectPanel.bind(this)}
                                     activeKey={this.state.panelState}>
-                            <TabPane eventKey={1} tab='Per-graph view'> </TabPane>
+                            <TabPane eventKey={1} tab='Graph view'> </TabPane>
                             <TabPane eventKey={2} tab='Profile view'> </TabPane>
                             <TabPane eventKey={3} tab='Config'> </TabPane>
                             <TabPane eventKey={4} tab='About'> </TabPane>
