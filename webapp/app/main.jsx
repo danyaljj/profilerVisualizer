@@ -1098,6 +1098,9 @@ class ProfilerVisualizer extends React.Component {
                             Query
                         </Button>
                     </div>
+                    <p id="explanationParagraph">
+                        Explanation: {this.state.sixTupleExplanation}
+                    </p>
                 </Panel>
                 {this.showSixTupleSchema()}
             </Panel>
@@ -1132,6 +1135,9 @@ class ProfilerVisualizer extends React.Component {
                             Query
                         </Button>
                     </div>
+                    <p id="explanationParagraph">
+                        Explanation: {this.state.pairwiseExplanation}
+                    </p>
                 </Panel>
                 {this.showPairwiseSchema()}
             </Panel>
@@ -1170,6 +1176,9 @@ class ProfilerVisualizer extends React.Component {
                             Query
                         </Button>
                     </div>
+                    <p id="explanationParagraph">
+                        Explanation: {this.state.tripleExplanation}
+                    </p>
                 </Panel>
                 {this.showTripleSchema()}
             </Panel>
@@ -1214,6 +1223,9 @@ class ProfilerVisualizer extends React.Component {
                             Query
                         </Button>
                     </div>
+                    <p id="explanationParagraph">
+                        Explanation: {this.state.quadrupleExplanation}
+                    </p>
                 </Panel>
                 {this.showQuadrupleSchema()}
             </Panel>
