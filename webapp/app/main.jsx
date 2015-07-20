@@ -119,7 +119,7 @@ var sixTupleSchema = [
     'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH'
 ];
 
-var schemaBasic = [
+var schemaAll  = [
     ['NER_SAME_SPAN', 'NER at the same span'],
     ['NER_AFTER', 'NER after'],
     ['NER_BEFORE', 'NER before'],
@@ -148,10 +148,9 @@ var schemaBasic = [
     ['EB', 'Entity before'],
     ['EA', 'Entity after'],
     ['NEAREST_NER_PAIR', 'Pair of nearest NERs (before and after)'],
-    ['NEAREST_POS_PAIR', 'Pair of nearest POSs (before and after)']
-];
+    ['NEAREST_POS_PAIR', 'Pair of nearest POSs (before and after)'],
 
-var schemaDep = [
+    // Dependency
     ['DepWithLabels', 'Dependant (with label)'],
     ['DepN', 'Dependant Noun'],
     ['DepN_WITH_LABELS', 'Dependant Noun (with label)'],
@@ -166,10 +165,9 @@ var schemaDep = [
     ['DepNER', 'Dependant NER'],
     ['DepNER_WITH_LABELS', 'Dependant NER (with label)'],
     ['DEP_COREF', 'Dependant co-referred word'],
-    ['DEP_COREF_WITH_PATH_BASED_LABELS', 'Dependant co-referred word (with labels)']
-];
+    ['DEP_COREF_WITH_PATH_BASED_LABELS', 'Dependant co-referred word (with labels)'],
 
-var schemaTriple = [
+    // triple
     ['TRIPLE_BEFORE', 'triple before'],
     ['TRIPLE_AFTER', 'triple after'],
     ['TRIPLE_BEFORE_NER_LABEL', 'triple before (NER labels)'],
@@ -224,10 +222,20 @@ var schemaTriple = [
     ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_OBJ_OBJ_REMOVE_BOTH', '']
 ];
 
+var schemaAllMap = {};
+schemaAll.forEach(function (el) {
+    schemaAllMap[el[0]] = el[1]
+});
+
+var possibleMaxItemsInSchema = [5, 10, 20, 50, 100];
+
 class ProfilerVisualizer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            // config
+            dnsAddress: '',
+
             // panel
             panelState: 1,
             helpContent: helpGloabl,
@@ -243,7 +251,7 @@ class ProfilerVisualizer extends React.Component {
             labelPlaceHolder: 'Label (Verb Sense)',
             surfaceString: '',
             labelString: '',
-            maxItemsPerTable: 20,
+            maxItemsPerTable: 2,
 
             // quadruple
             quadrupleAttribute: 0,
@@ -296,7 +304,9 @@ class ProfilerVisualizer extends React.Component {
             surface: this.state.surfaceString,
             label: this.state.labelString,
             entityType: this.state.profilerType,
-            queryType: queryType
+            queryType: queryType,
+            maxItemsPerTable: possibleMaxItemsInSchema[this.state.maxItemsPerTable],
+            dnsAddress: this.state.dnsAddress
         }, {timeout: 50000, responseType: 'json'}).then(function (response) {
                 console.log('response.text = ' + response.text);
                 console.log('response = ' + JSON.parse(response.text));
@@ -373,7 +383,7 @@ class ProfilerVisualizer extends React.Component {
             });
             var titles = Object.keys(JSON.parse(resultAll[0]));
             var contents = [];
-            for (var i = 0; i < this.state.maxItemsPerTable && i < resultAll.length; i++) {
+            for (var i = 0; i < possibleMaxItemsInSchema[this.state.maxItemsPerTable] && i < resultAll.length; i++) {
                 // console.log("i = " + i);
                 var rowMap = JSON.parse(resultAll[i]);
                 var oneRow = titles.map(function (titleElement) {
@@ -434,7 +444,7 @@ class ProfilerVisualizer extends React.Component {
             </thead>;
             rows.push(title);
 
-            var contents = Object.keys(tableContent).slice(0, this.state.maxItemsPerTable).map(function (key) {
+            var contents = Object.keys(tableContent).slice(0, possibleMaxItemsInSchema[this.state.maxItemsPerTable]).map(function (key) {
                 return [key, tableContent[key]]
             });
 
@@ -1200,11 +1210,47 @@ class ProfilerVisualizer extends React.Component {
             </div> );
     }
 
+    changeDnsHandle(e){
+        this.setState({dnsAddress: e.target.value})
+    }
+
+    handleMaxItemDropdown(key) {
+        this.setState({maxItemsPerTable: key})
+    }
+
     configView() {
         var Panel = require('react-bootstrap').Panel;
+        var Input = require('react-bootstrap').Input;
+        var DropdownButton = require('react-bootstrap').DropdownButton;
+        var MenuItem = require('react-bootstrap').MenuItem;
+
+        var items = [];
+        var self = this;
+        possibleMaxItemsInSchema.forEach(function(entry, i){
+            items.push( <MenuItem eventKey={i}>{possibleMaxItemsInSchema[i]}</MenuItem> )
+        });
+
         return (
             <div>
                 <Panel id="mainPanel" header="Help and Configuration">
+                    <Input
+                        type='text'
+                        placeholder='Enter DNS here'
+                        label='ProfilerDB DNS'
+                        help='if you leave this empty, the software will use its default value in the backend'
+                        hasFeedback
+                        ref='input'
+                        groupClassName='group-class'
+                        labelClassName='label-class'
+                        onChange={this.changeDnsHandle.bind(this)} />
+
+                    <br/>
+                    <DropdownButton title='Maximum number items in each context'
+                                    onSelect={this.handleMaxItemDropdown.bind(this)}>
+                        {items}
+                    </DropdownButton>
+                    <h5>Current Value: {possibleMaxItemsInSchema[this.state.maxItemsPerTable]}</h5>
+
 
                 </Panel>
             </div>
@@ -1213,11 +1259,48 @@ class ProfilerVisualizer extends React.Component {
 
     aboutView() {
         var Panel = require('react-bootstrap').Panel;
+        var Label = require('react-bootstrap').Label;
+        var helpPanelParagraphStyle = {
+            margin: "10px",
+            textAlign: "justify"
+        };
         return (
             <div>
                 <Panel id="mainPanel" header="About">
-                    It is around 200GB in size, and it contains 3,636,263 profiles
-                    for Wikipedia entities and 313,156 profiles for Verbsense entities.
+                    <div style={helpPanelParagraphStyle}>
+                        In many natural language processing tasks, contextual
+                        information from given documents alone is not
+                        sufficient to support the desired textual inference.
+                        In such cases, background knowledge about certain
+                        entities and concepts could be quite helpful. While
+                        many knowledge bases (KBs) focus on combining
+                        data from existing databases, including dictionaries
+                        and other human generated knowledge, we observe
+                        that in many cases the information needed to
+                        support textual inference involves detailed information
+                        about entities, entity types and relations among
+                        them; e.g., is the verb “fire” more likely to occur
+                        with an organization or a location as its Subject? In
+                        order to facilitate reliable answers to these types of
+                        questions, we propose to collect large scale graphbased
+                        statistics from huge corpora annotated using
+                        state-of-the-art NLP tools. We define a range of knowledge schemas,
+                        then extract and organize the resulting statistical
+                        KB using a new tool, the <strong>Profiler</strong>.
+
+                        <br />
+                        <Label bsStyle='success'>Statistics</Label> The profiler database is around 200GB in size, and it contains 3,636,263 profiles
+                        for Wikipedia entities and 313,156 profiles for Verbsense entities.
+
+                        <br />
+                        <Label bsStyle='success'>Credits</Label> The major part of this is result of
+                        <a href="https://www.linkedin.com/in/zfei1"> Zhiye Fei</a>'s thesis.
+                         More details on Profiler can be find in <a href="http://cogcomp.cs.illinois.edu/page/publication_view/770">
+                             this publication
+                        </a>. Please send all bug reports, comments and questions to
+                        <a href="http://web.engr.illinois.edu/~khashab2/"> Daniel</a>.
+                        The code for this page is available <a href="https://github.com/danyaljj/profilerVisualizer"> here</a>.
+                    </div>
                 </Panel>
             </div>
         );
@@ -1232,7 +1315,7 @@ class ProfilerVisualizer extends React.Component {
         console.log('3 ... ');
         this.queryHandle(1, 2);
         console.log('4 ... ');
-        if( this.state.profilerType == 0 ) {
+        if( this.state.profilerType == 0 ) { // only when it is verb schema
             this.queryHandle(2, 3);
             console.log('5 ... ');
         }
@@ -1277,67 +1360,144 @@ class ProfilerVisualizer extends React.Component {
         //});
 
         var helpPanelStyle = {
-            margin: "50px"
+            margin: "10px"
         };
         var helpPanelParagraphStyle = {
             margin: "10px",
-            textAlign: "left"
+            textAlign: "justify"
         };
         var helpPanelItemizeStyle = {
             margin: "40px",
             textAlign: "left"
         };
+
+        //<h1> DepN  </h1>
+        //{this.ShowASimpleTable('DepN', 0)}
+        //<h1> DepNP  </h1>
+        //{this.ShowASimpleTable('DepNP', 0)}
+        //<h1> DepNER  </h1>
+        //{this.ShowASimpleTable('DepNER', 0)}
+        //<h1> DEP_COREF  </h1>
+        //{this.ShowATable('DEP_COREF', 2)}
+        //<h1> DEP_COREF_WITH_PATH_BASED_LABELS  </h1>
+        //{this.ShowATable('DEP_COREF_WITH_PATH_BASED_LABELS', 2)}
+
+        //<ButtonGroup vertical>
+        //    <Button onClick={this.setSurfaceAndLabelAndQuery.bind(this, "Seattle", "http://en.wikipedia.org/wiki/Seattle,_Washington", 1)}>Surface: Seattle, Label: <a href="http://en.wikipedia.org/wiki/Seattle,_Washington">
+        //        http://en.wikipedia.org/wiki/Seattle,_Washington
+        //    </a> (the city)</Button>
+        //    <Button>Surface: Seattle, Label: <a href="http://en.wikipedia.org/wiki/Seattle_Seahawks">
+        //        http://en.wikipedia.org/wiki/Seattle_Seahawks
+        //    </a> (the football team)</Button>
+        //    <Button>Surface: Seattle, Label: <a href="http://en.wikipedia.org/wiki/Seattle_Storm">
+        //        http://en.wikipedia.org/wiki/Seattle_Storm
+        //    </a> (the basketball team)</Button>
+        //    <Button>Surface: Seattle, Label: <a href="http://en.wikipedia.org/wiki/Seattle_Mariners">
+        //        http://en.wikipedia.org/wiki/Seattle_Mariners
+        //    </a> (the baseball team)</Button>
+        //    <Button>Surface: Seattle, Label: <a href="http://en.wikipedia.org/wiki/Seattle_University">
+        //        http://en.wikipedia.org/wiki/Seattle_University
+        //    </a> (the university)</Button>
+        //    <Button>Surface: Seattle, Label: <a href="http://en.wikipedia.org/wiki/Seattle_Symphony">
+        //        http://en.wikipedia.org/wiki/Seattle_Symphony
+        //    </a> (Seattle symphony)</Button>
+        //</ButtonGroup>
+
+        var seattleQueries = [
+            ["Seattle", "http://en.wikipedia.org/wiki/Seattle,_Washington", "the city"],
+            ["Seattle","http://en.wikipedia.org/wiki/Seattle_Seahawks", "the football team"],
+            ["Seattle","http://en.wikipedia.org/wiki/Seattle_Storm", "the basketball team"],
+            ["Seattle","http://en.wikipedia.org/wiki/Seattle_Mariners", "the baseball team"],
+            ["Seattle","http://en.wikipedia.org/wiki/Seattle_University", "the university"],
+            ["Seattle","http://en.wikipedia.org/wiki/Seattle_Symphony", "Seattle symphony"]
+        ];
+
+        //<ButtonGroup vertical>
+        //    <Button>Surface: grow, Label: 03 (produce by cultivation)</Button>
+        //    <Button>Surface: grow, Label: 04 (go from child to adult) </Button>
+        //</ButtonGroup>
+
+        var verbQueries = [
+            ["grow", "03", "produce by cultivation"],
+            ["grow", "04", "go from child to adult"]
+        ];
+
+        var self = this;
+        var seattleQueryOut = [];
+        seattleQueries.forEach(function(item){
+            seattleQueryOut.push( <Button
+                onClick={self.setSurfaceAndLabelAndQuery.bind(self, item[0], item[1], 1)}>
+                Surface: {item[1]}, Label: <a href={item[1]}> {item[1]} </a> {item[2]} </Button>);
+        });
+
+        var verbQueryOut = [];
+        verbQueries.forEach(function(item){
+            verbQueryOut.push( <Button
+                onClick={self.setSurfaceAndLabelAndQuery.bind(self, item[0], item[1], 0)}>
+                Surface: {item[1]}, Label: <a href={item[1]}> {item[1]} </a> {item[2]} </Button>);
+        });
+
         return ( <div>
             <Navbar brand='Query Configuration'>
                 <Nav>
-                    <DropdownButton eventKey={1} title='Profile Type'
-                                    onSelect={this.handleSchemaTypeChange.bind(this)}>
-                        <MenuItem eventKey='1'>Wiki Entity</MenuItem>
-                        <MenuItem eventKey='2'>Verb Sense</MenuItem>
-                    </DropdownButton>
                     {this.getQueryList()}
                 </Nav>
             </Navbar>
+
             <Button
                 onClick={this.handleQueryViewQuery.bind(this)}
                 bsStyle="success">
                 Query
             </Button>
+
             <PanelGroup accordion>
                 <Panel style={helpPanelStyle} header='Quick guide' eventKey='1' bsStyle='danger'>
                     <p style={helpPanelParagraphStyle}>
                         The statistics that share an important common
                         constituent are gathered into the same <strong>profiles</strong>.
+                        Each profile has a set of keys that uniquely identifies it. For example,
+                        profiles of Wikipedia entities are uniquely identified by both
+                        their surface form and the Wikipedia url.
                         For example,
                         all of the schema instances which contain the entity
                         “Seattle” (the city) as one of their constituents are gathered in
                         the profile of “Seattle” (the city). In order to query the profile of
                         “Seattle” (the city):
                     </p>
-                        <ol style={helpPanelItemizeStyle}>
-                            <li>Choose “Attribute", in the above navbar. </li>
-                            <li>Choose “Wiki Entity" as the type of profile (type of the key entity) </li>
-                            <li>Write “Seattle" as entity name</li>
-                            <li>Write
-                                “<a href="http://en.wikipedia.org/wiki/Seattle,_Washington">
-                                    http://en.wikipedia.org/wiki/Seattle,_Washington
-                                </a>" as label. Note that this link uniquely distinguished Seattle
-                                city from other entities which might have the same name. </li>
-                        </ol>
+                    <ol style={helpPanelItemizeStyle}>
+                        <li>Choose “Attribute", in the above navbar. </li>
+                        <li>Choose “Wiki Entity" as the type of profile (type of the key entity) </li>
+                        <li>Write “Seattle" as entity name</li>
+                        <li>Write
+                            “<a href="http://en.wikipedia.org/wiki/Seattle,_Washington">
+                                http://en.wikipedia.org/wiki/Seattle,_Washington
+                            </a>" as label. Note that this link uniquely distinguished Seattle
+                            city from other entities which might have the same name. </li>
+                    </ol>
 
                     <p style={helpPanelParagraphStyle}>
-                        Similarly we have profiles
-                        for “Seattle” (Seahawks), “grow” (sense 3, meaning “produce
-                        by cultivation”), “grow” (sense 4, meaning “go from child to
-                        adult”), and so on. As can be seen, there can be multiple pro-
-                        file types, e.g. (Wikipedia based) entities, (Propbank based)
-                        Verbsense [Kingsbury and Palmer, 2002], etc. 1 Each pro-
-                        file has a set of keys that uniquely identifies it. For example,
-                        profiles of Wikipedia entities are uniquely identified by both
-                        their surface form and the Wikipedia url. In doing this, we
-                        are able to disambiguate different entities that have the same
-                        surface form, as we show in the visualization.
-                        <br/> <br/>
+                        Similarly you can try other “Seattle”s, e.g.“Seattle” (Seahawks). The following
+                        buttons are meant to ease your life! Click on each button to see the result of query,
+                        rather than typing the queries.
+                    </p>
+
+                    <ButtonGroup vertical> {seattleQueryOut} </ButtonGroup>
+
+                    <p style={helpPanelParagraphStyle}>
+                        You can do a similar thing for verb and their senses.
+                        For example, “grow” (sense 3, meaning “produce
+                    by cultivation”), “grow” (sense 4, meaning “go from child to
+                    adult”), and so on. Try the following buttons to see the profiles of the corresponding verbs.
+                    </p>
+
+                    <ButtonGroup vertical>{verbQueryOut} </ButtonGroup>
+
+                    <p style={helpPanelParagraphStyle}>
+                        <br/>
+                        <Label bsStyle='danger'>Note</Label> If you enter only "Surface" (and no "label"),
+                        the resulting statistics will be average of the statistics over all of the profiles
+                        which match the "Surface".
+                        <br/>
                         <Label bsStyle='danger'>Note</Label> The database of profiles is
                         HUGE! We keep the full database on an Amazon EC2 server. To save money
                         the server is often off, although many of the examples people have tried
@@ -1354,25 +1514,25 @@ class ProfilerVisualizer extends React.Component {
             {this.showASetOfTables(pairwiseSchema, 0, 1)}
             {this.showASetOfTables(quadrupleSchema, 2, 1)}
             {this.showASetOfTables(sixTupleSchema, 3, 1)}
-            <h1> DepN  </h1>
-            {this.ShowASimpleTable('DepN', 0)}
-            <h1> DepNP  </h1>
-            {this.ShowASimpleTable('DepNP', 0)}
-            <h1> DepNER  </h1>
-            {this.ShowASimpleTable('DepNER', 0)}
-            <h1> DEP_COREF  </h1>
-            {this.ShowATable('DEP_COREF', 2)}
-            <h1> DEP_COREF_WITH_PATH_BASED_LABELS  </h1>
-            {this.ShowATable('DEP_COREF_WITH_PATH_BASED_LABELS', 2)}
 
         </div> );
     }
 
-        showASetOfTables (tableTitles, type, tableType) {
+    // profileType (1: Wiki, 0: Verb)
+    setSurfaceAndLabelAndQuery(surface, label, profileType) {
+        this.setState({
+            surfaceString: surface,
+            labelString: label,
+            profilerType: profileType
+        });
+        this.handleQueryViewQuery();
+    }
+
+    showASetOfTables (tableTitles, type, tableType) {
         var self = this;
         var schemaTables = [];
         tableTitles.forEach( function(schemaName) {
-                schemaTables.push( <h3> {schemaName}  </h3> );
+                //schemaTables.push( <h3> {schemaAllMap[schemaName]}  </h3> );
                 if( tableType == 0 )
                     schemaTables.push( <div>  {self.ShowASimpleTable(schemaName, type)} </div> );
                 else if( tableType == 1 )
@@ -1410,32 +1570,32 @@ class ProfilerVisualizer extends React.Component {
         var aboutView = '';
         if (this.state.panelState === 4)
             aboutView = this.aboutView();
-            return (
-                <div id="mainDiv">
-                    <PageHeader>
-                        <h1> Profiler
-                            <small> Knowledge Schemas at Scale!</small>
-                        </h1>
-                    </PageHeader>
-                    <main className="text-center padded">
-                        <section>
-                            <TabbedArea defaultActiveKey={this.state.panelState}
-                                        onSelect={this.handleSelectPanel.bind(this)}
-                                        activeKey={this.state.panelState}>
-                                <TabPane eventKey={1} tab='Per-graph view'> </TabPane>
-                                <TabPane eventKey={2} tab='Profile view'> </TabPane>
-                                <TabPane eventKey={3} tab='Help'> </TabPane>
-                                <TabPane eventKey={4} tab='About'> </TabPane>
-                            </TabbedArea>
-                            <br />
-                            {configView}
-                            {aboutView}
-                            {queryView}
-                            {conceptGraphView}
-                        </section>
-                    </main>
-                </div>
-            );
+        return (
+            <div id="mainDiv">
+                <PageHeader>
+                    <h1> Profiler
+                        <small> Knowledge Schemas at Scale!</small>
+                    </h1>
+                </PageHeader>
+                <main className="text-center padded">
+                    <section>
+                        <TabbedArea defaultActiveKey={this.state.panelState}
+                                    onSelect={this.handleSelectPanel.bind(this)}
+                                    activeKey={this.state.panelState}>
+                            <TabPane eventKey={1} tab='Per-graph view'> </TabPane>
+                            <TabPane eventKey={2} tab='Profile view'> </TabPane>
+                            <TabPane eventKey={3} tab='Config'> </TabPane>
+                            <TabPane eventKey={4} tab='About'> </TabPane>
+                        </TabbedArea>
+                        <br />
+                        {configView}
+                        {aboutView}
+                        {queryView}
+                        {conceptGraphView}
+                    </section>
+                </main>
+            </div>
+        );
     }
 }
 

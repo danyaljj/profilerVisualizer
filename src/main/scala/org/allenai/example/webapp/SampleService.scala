@@ -17,13 +17,16 @@ class SampleService extends Directives with SprayJsonSupport {
     pathPrefix("hello") {
       pathEnd {
         get {
-          parameters("surface", "label", "entityType", "queryType") {
-            (surface, label, entityType, queryType) =>
+          parameters("surface", "label", "entityType", "queryType",
+            "maxItemsPerTable", "dnsAddress") {
+            (surface, label, entityType, queryType, maxItemsPerTable, dnsAddress) =>
               println("Surface = " + surface)
               println("Label = " + label)
               println("entityType = " + entityType)
               println("queryType = " + queryType)
-              val host = "ec2-54-157-219-247.compute-1.amazonaws.com"
+              println("maxItemsPerTable = " + maxItemsPerTable)
+              println("dnsAddress = " + dnsAddress)
+              val host = "ec2-50-16-99-85.compute-1.amazonaws.com"
               val port = 27017
 
               val queryEntity = if (entityType.toInt == 1) EntityTypes.WIKIFIER_ENTITY else EntityTypes.VERBSENSE_ENTITY
@@ -35,15 +38,14 @@ class SampleService extends Directives with SprayJsonSupport {
                 case 2 => SchemaCategories.TRIPLE
               }
 
-              val profiles = if( querySurface != null && queryLabel != null )
+              val profiles = if (querySurface == null && queryLabel == null) "" else
                 ProfilerCacherRedis.queryProfileWithCaching(querySurface, queryLabel,
                   queryEntity, querySchemaCategory, 20)
-              else  ""
 
-//              lazy val profilerClient = new ProfilerClient(host, port)
+              //              lazy val profilerClient = new ProfilerClient(host, port)
               //              //println("querySchemaCategory = " + querySchemaCategory)
               //val profiles = profilerClient.queryProfiles(querySurface, queryLabel, queryEntity, querySchemaCategory, 20)
-//              println("number of profiles found = " + profiles.size())
+              //              println("number of profiles found = " + profiles.size())
 
               //            val scalaProfiles = Profiles.convertProfilesToScala(profiles)
               //            println("number of profiles in Scala = " + scalaProfiles.profiles.length)

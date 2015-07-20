@@ -4,10 +4,9 @@ This is a web interface for the profiler.
 
 - The assumptions is that the profiler data base is running on a machine on a AWS EC2 machine. 
 - The user will be able to choose knowledge schema and qeuery based on that. 
-- Querying is simply filling our the missing values (dependant on the type of schema).  
-- The output will be results matching to the query, sorted by their score. 
+- Querying is simply filling out the missing values (dependant on the type of schema).  
+- The output will be all matching results to the query, sorted by their score. 
 - The tabular representation seems to be appropriate enough. 
-
 
 This web application which includes a ReactJS client-side application and an API emitting JSON.
 
@@ -24,13 +23,13 @@ This web application which includes a ReactJS client-side application and an API
 
 ## Dependencies
 
-* [nodejs]
+* nodejs
 
   ```shell
   brew install node
   ```
 
-* [sbt]
+* sbt
 
   ```shell
   brew install sbt
@@ -59,7 +58,8 @@ Changes to the front-end code will be applied as you make them, even if you only
 
 There's a slight lag, but keep an eye on your `sbt` console for information regarding the front-end build.
 
+
 ## Questions?
 
-[khashab2@illinois.edu](mailto:khashab2@illinois.edu)
+[http://web.engr.illinois.edu/~khashab2/](http://web.engr.illinois.edu/~khashab2/)
 
