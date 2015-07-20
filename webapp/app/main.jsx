@@ -71,18 +71,26 @@ var pairwiseSchemaSimple = [
     'VPIA',
     'NVPA',
     'VPA',
-    'MOD',
-    'EB',
-    'EA'
+    'MOD'
 ];
 
 var pairwiseSchema = [
-    'NEAREST_NER_PAIR',
-    'NEAREST_POS_PAIR'
+    // basic
+    'EA',
+    'EB',
+
+    // deb
+    'DepN',
+    'DepNP',
+    'DepV',
+    'DepM',
+    'DepNER_WITH_LABELS',
+    'DepLabel'
 ];
 
 var tripleSchema = [
-
+    'NEAREST_NER_PAIR',
+    'NEAREST_POS_PAIR'
 ];
 
 var quadrupleSchema = [
@@ -1027,6 +1035,187 @@ class ProfilerVisualizer extends React.Component {
 //<h1> DEP_COREF_WITH_PATH_BASED_LABELS  </h1>
 //{this.ShowATable('DEP_COREF_WITH_PATH_BASED_LABELS', 2)}
 
+    sixTuplePanel() {
+        var Button = require('react-bootstrap').Button;
+        var Panel = require('react-bootstrap').Panel;
+
+        return(
+            <Panel>
+                <Panel header="Concept Graph" bsStyle='success'>
+
+                    <div id="sixTupleGraphMain">
+                        <div className="tree" id="pairGraph">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li>
+                                               <span className="so-label">
+                                                 {this.getRoleList(triple_roles_subjObj, 3, 0)}
+                                               </span>
+                                            {this.getAttributeList(triple_attribbutes, 3, 0)}
+                                        </li>
+                                        <li>
+                                              <span className="so-label">
+                                                 {this.getRoleList(triple_roles_subjObj, 3, 1)}
+                                              </span>
+                                            {this.getAttributeList(attribute_raw_text)}
+                                        </li>
+                                        <li>
+                                            {this.getAttributeList(triple_attribbutes, 3, 1)}
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>
+                                            {this.getAttributeList(triple_attribbutes, 3, 2)}
+                                        </li>
+                                        <li>
+                                            {this.getQueryList()}
+                                              <span className="so-label">
+                                                 {this.getRoleList(triple_roles_subjObj, 3, 2)}
+                                              </span>
+                                        </li>
+                                        <li>
+                                            {this.getAttributeList(triple_attribbutes, 3, 3)}
+                                              <span className="so-label">
+                                                 {this.getRoleList(triple_roles_subjObj, 3, 3)}
+                                              </span>
+                                        </li>
+                                    </ul>
+                                       <span className="so-label">
+                                         {this.getRoleList(triple_roles, 4)}
+                                       </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <Button bsStyle="success" bsSize="small"
+                                onClick={this.queryHandle.bind(this, 2, 3)}>
+                            Query
+                        </Button>
+                    </div>
+                </Panel>
+                {this.showSixTupleSchema()}
+            </Panel>
+        );
+    }
+
+    pairwisePanel(){
+        var Button = require('react-bootstrap').Button;
+        var Panel = require('react-bootstrap').Panel;
+
+        return (
+            <Panel>
+                <Panel header="Concept Graph" bsStyle='success'>
+                    <div id="pairGraphMain">
+                        <div className="tree" id="pairGraph">
+                            <ul>
+                                <li>
+                      <span className="so-label">
+                        {this.getRoleList(role_pairwise, 0)}
+                      </span>
+                                    {this.getAttributeList(attributes, 0)}
+                                </li>
+                                <li>
+                      <span>
+                      {this.getQueryList()}
+                      </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <Button bsStyle="success" bsSize="small"
+                                onClick={this.queryHandle.bind(this, 0, 0)}>
+                            Query
+                        </Button>
+                    </div>
+                </Panel>
+                {this.showPairwiseSchema()}
+            </Panel>
+        );
+    }
+
+    triplePanel() {
+        var Button = require('react-bootstrap').Button;
+        var Panel = require('react-bootstrap').Panel;
+
+        return (
+            <Panel>
+                <Panel header="Concept Graph" bsStyle='success'>
+                    <div id="pairGraphMain">
+                        <div className="tree" id="pairGraph">
+                            <ul>
+                                <li>
+                  <span className="so-label">
+                    {this.getRoleList(['before'])}
+                  </span>
+                                    {this.getAttributeList(['POS', 'NER'], 1)}
+                                </li>
+                                <li>
+                                    {this.getQueryList()}
+                                </li>
+                                <li>
+                                    {this.getAttributeList(['POS', 'NER'], 1)}
+                  <span className="so-label">
+                    {this.getRoleList(['after'])}
+                  </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <Button bsStyle="success" bsSize="small"
+                                onClick={this.queryHandle.bind(this, 0, 1)}>
+                            Query
+                        </Button>
+                    </div>
+                </Panel>
+                {this.showTripleSchema()}
+            </Panel>
+        );
+    }
+
+    quadruplePanel() {
+        var Button = require('react-bootstrap').Button;
+        var Panel = require('react-bootstrap').Panel;
+
+        return (
+            <Panel>
+                <Panel header="Concept Graph" bsStyle='success'>
+                    <div id="quadGraphMain">
+                        <div className="tree" id="pairGraph">
+                            <ul>
+                                <li>
+                        <span className="so-label">
+                          {this.getRoleList(['Dep'])}
+                        </span>
+                                    {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
+                                </li>
+                                <li>
+                        <span className="so-label">
+                          {this.getRoleList(['Co-reffered'])}
+                        </span>
+                                    {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
+                                </li>
+                                <li>
+                                    {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
+                        <span className="so-label">
+                          {this.getRoleList(['Dep'])}
+                        </span>
+                                </li>
+                                <li>
+                                    {this.getQueryList()}
+                                </li>
+                            </ul>
+                        </div>
+                        <Button bsStyle="success" bsSize="small"
+                                onClick={this.queryHandle.bind(this, 1, 2)}>
+                            Query
+                        </Button>
+                    </div>
+                </Panel>
+                {this.showQuadrupleSchema()}
+            </Panel>
+        );
+    }
+
     conceptGraphView() {
         var Button = require('react-bootstrap').Button;
         var ButtonGroup = require('react-bootstrap').ButtonGroup;
@@ -1052,6 +1241,11 @@ class ProfilerVisualizer extends React.Component {
             margin: "40px",
             textAlign: "left"
         };
+
+        var pairwisePanel = this.pairwisePanel();
+        var triplePanel = this.triplePanel();
+        var quadruplePanel = this.quadruplePanel();
+        var sixTuplePanel = this.sixTuplePanel();
 
         return (
             <div>
@@ -1100,158 +1294,11 @@ class ProfilerVisualizer extends React.Component {
                     </Panel>
                 </PanelGroup>
 
-                <Panel>
-                    <Panel header="Concept Graph" bsStyle='success'>
-                        <div id="pairGraphMain">
-                            <div className="tree" id="pairGraph">
-                                <ul>
-                                    <li>
-                      <span className="so-label">
-                        {this.getRoleList(role_pairwise, 0)}
-                      </span>
-                                        {this.getAttributeList(attributes, 0)}
-                                    </li>
-                                    <li>
-                      <span>
-                      {this.getQueryList()}
-                      </span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <Button bsStyle="success" bsSize="small"
-                                    onClick={this.queryHandle.bind(this, 0, 0)}>
-                                Query
-                            </Button>
-                        </div>
-                    </Panel>
-                    {this.showPairwiseSchema()}
-                </Panel>
+                {pairwisePanel}
+                {triplePanel}
+                {quadruplePanel}
+                {sixTuplePanel}
 
-                <Panel>
-                    <Panel header="Concept Graph" bsStyle='success'>
-                        <div id="pairGraphMain">
-                            <div className="tree" id="pairGraph">
-                                <ul>
-                                    <li>
-                  <span className="so-label">
-                    {this.getRoleList(['before'])}
-                  </span>
-                                        {this.getAttributeList(['POS', 'NER'], 1)}
-                                    </li>
-                                    <li>
-                                        {this.getQueryList()}
-                                    </li>
-                                    <li>
-                                        {this.getAttributeList(['POS', 'NER'], 1)}
-                  <span className="so-label">
-                    {this.getRoleList(['after'])}
-                  </span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <Button bsStyle="success" bsSize="small"
-                                    onClick={this.queryHandle.bind(this, 0, 1)}>
-                                Query
-                            </Button>
-                        </div>
-                    </Panel>
-                    {this.showTripleSchema()}
-                </Panel>
-
-                <Panel>
-                    <Panel header="Concept Graph" bsStyle='success'>
-                        <div id="quadGraphMain">
-                            <div className="tree" id="pairGraph">
-                                <ul>
-                                    <li>
-                        <span className="so-label">
-                          {this.getRoleList(['Dep'])}
-                        </span>
-                                        {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
-                                    </li>
-                                    <li>
-                        <span className="so-label">
-                          {this.getRoleList(['Co-reffered'])}
-                        </span>
-                                        {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
-                                    </li>
-                                    <li>
-                                        {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
-                        <span className="so-label">
-                          {this.getRoleList(['Dep'])}
-                        </span>
-                                    </li>
-                                    <li>
-                                        {this.getQueryList()}
-                                    </li>
-                                </ul>
-                            </div>
-                            <Button bsStyle="success" bsSize="small"
-                                    onClick={this.queryHandle.bind(this, 1, 2)}>
-                                Query
-                            </Button>
-                        </div>
-                    </Panel>
-                    {this.showQuadrupleSchema()}
-                </Panel>
-
-                <Panel>
-                    <Panel header="Concept Graph" bsStyle='success'>
-
-                        <div id="sixTupleGraphMain">
-                            <div className="tree" id="pairGraph">
-                                <ul>
-                                    <li>
-                                        <ul>
-                                            <li>
-                                               <span className="so-label">
-                                                 {this.getRoleList(triple_roles_subjObj, 3, 0)}
-                                               </span>
-                                                {this.getAttributeList(triple_attribbutes, 3, 0)}
-                                            </li>
-                                            <li>
-                                              <span className="so-label">
-                                                 {this.getRoleList(triple_roles_subjObj, 3, 1)}
-                                              </span>
-                                                {this.getAttributeList(attribute_raw_text)}
-                                            </li>
-                                            <li>
-                                                {this.getAttributeList(triple_attribbutes, 3, 1)}
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <ul>
-                                            <li>
-                                                {this.getAttributeList(triple_attribbutes, 3, 2)}
-                                            </li>
-                                            <li>
-                                                {this.getQueryList()}
-                                              <span className="so-label">
-                                                 {this.getRoleList(triple_roles_subjObj, 3, 2)}
-                                              </span>
-                                            </li>
-                                            <li>
-                                                {this.getAttributeList(triple_attribbutes, 3, 3)}
-                                              <span className="so-label">
-                                                 {this.getRoleList(triple_roles_subjObj, 3, 3)}
-                                              </span>
-                                            </li>
-                                        </ul>
-                                       <span className="so-label">
-                                         {this.getRoleList(triple_roles, 4)}
-                                       </span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <Button bsStyle="success" bsSize="small"
-                                    onClick={this.queryHandle.bind(this, 2, 3)}>
-                                Query
-                            </Button>
-                        </div>
-                    </Panel>
-                    {this.showSixTupleSchema()}
-                </Panel>
             </div> );
     }
 
@@ -1472,14 +1519,14 @@ class ProfilerVisualizer extends React.Component {
         seattleQueries.forEach(function(item){
             seattleQueryOut.push( <Button
                 onClick={self.setSurfaceAndLabelAndQuery.bind(self, item[0], item[1], 1)}>
-                Surface: {item[1]}, Label: <a href={item[1]}> {item[1]} </a> {item[2]} </Button>);
+                Surface: {item[1]}, Label: <a href={item[1]}> {item[1]} </a>, ({item[2]}) </Button>);
         });
 
         var verbQueryOut = [];
         verbQueries.forEach(function(item){
             verbQueryOut.push( <Button
                 onClick={self.setSurfaceAndLabelAndQuery.bind(self, item[0], item[1], 0)}>
-                Surface: {item[1]}, Label: <a href={item[1]}> {item[1]} </a> {item[2]} </Button>);
+                Surface: {item[1]}, Label: {item[1]}, ({item[2]}) </Button>);
         });
 
         return ( <div>
@@ -1499,7 +1546,7 @@ class ProfilerVisualizer extends React.Component {
             <PanelGroup accordion>
                 <Panel style={helpPanelStyle} header='Quick guide' eventKey='1' bsStyle='danger'>
                     <p style={helpPanelParagraphStyle}>
-                        The statistics that share an important common
+                        The statistics (based on all possible graphs, the "Graph View" tab) that share an important common
                         constituent are gathered into the same <strong>profiles</strong>.
                         Each profile has a set of keys that uniquely identifies it. For example,
                         profiles of Wikipedia entities are uniquely identified by both
