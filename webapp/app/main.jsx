@@ -1449,6 +1449,17 @@ class ProfilerVisualizer extends React.Component {
                         </a>. Please send all bug reports, comments and questions to
                         <a href="http://web.engr.illinois.edu/~khashab2/"> Daniel</a>.
                         The code for this page is available <a href="https://github.com/danyaljj/profilerVisualizer"> here</a>.
+
+                        <br />
+                        <Label bsStyle='success'>Acknowledgment</Label> This work is partly supported by DARPA
+                        under agreement number FA8750-13-2-0008 and by a grant from
+                        <a href="http://allenai.org"> Allen
+                            Institute for Artificial Intelligence (AI2) </a>. Thanks
+                        to <a href="https://github.com/codeviking">Sam Skjonsberg </a> for
+                        providing base code of this visualizer and helps throughout the project. Special
+                        thanks
+                        to <a href="https://github.com/dirkgr"> Dirk Groeneveld </a> and <a href="https://github.com/jkinkead">Jesse Kinkead</a> for
+                        sincere helps.
                     </div>
                 </Panel>
             </div>
