@@ -663,9 +663,14 @@ class ProfilerVisualizer extends React.Component {
         //    <DropdownButton bsStyle='danger' title='Attribute' bsSize='xsmall'>
         //        <MenuItem onSelect={doNothing}>
 
+        var queryMenuStyle = {
+            width: "80%",
+            margin: "0 auto"
+        };
+
         return (
             <DropdownButton bsStyle='danger' title='Attribute' key='1' bsSize='xsmall'>
-                <MenuItem eventKey='1' MenuItem onSelect={doNothing}>
+                <div style={queryMenuStyle}>
                     <ButtonToolbar>
                         <ButtonGroup bsSize='xsmall'>
                             <Button key='1' eventKey='1'
@@ -680,7 +685,7 @@ class ProfilerVisualizer extends React.Component {
                     <Input type='text' className='input-sm'
                            onChange={this.updateLabelHandle.bind(this)}
                            placeholder={this.state.labelPlaceHolder}/>
-                </MenuItem>
+                </div>
             </DropdownButton>
         );
     }
