@@ -313,7 +313,7 @@ class ProfilerVisualizer extends React.Component {
         console.log(this.state.labelString);
 
         var self = this;
-        Qwest.get('/api/hello', {
+        Qwest.get('api/hello', {
             surface: this.state.surfaceString,
             label: this.state.labelString,
             entityType: this.state.profilerType,
