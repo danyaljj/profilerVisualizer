@@ -884,10 +884,12 @@ class ProfilerVisualizer extends React.Component {
             output = this.ShowATable(schema, 1);
         if (schemaSimple != '')
             output = this.ShowASimpleTable(schemaSimple, 1);
+
+        var Panel = require('react-bootstrap').Panel;
         return (
-            <div>
+            <Panel>
                 {output}
-            </div>
+            </Panel>
         );
     }
 
@@ -909,15 +911,16 @@ class ProfilerVisualizer extends React.Component {
         console.log('Quadruple: schema = ' + schema);
         console.log('Quadruple: schemaSimple = ' + schemaSimple);
 
+        var Panel = require('react-bootstrap').Panel;
         var output = '';
         if (schema != '')
             output = this.ShowATable(schema, 2);
         if (schemaSimple != '')
             output = this.ShowASimpleTable(schemaSimple, 2);
         return (
-            <div>
+            <Panel>
                 {output}
-            </div>
+            </Panel>
         );
     }
 
@@ -1004,10 +1007,11 @@ class ProfilerVisualizer extends React.Component {
             output = this.ShowATable(schema, 3);
         if (schemaSimple != '')
             output = this.ShowASimpleTable(schemaSimple, 3);
+        var Panel = require('react-bootstrap').Panel;
         return (
-            <div>
+            <Panel>
                 {output}
-            </div>
+            </Panel>
         );
     }
 
@@ -1121,22 +1125,21 @@ class ProfilerVisualizer extends React.Component {
         return(
             <Panel>
                 <Panel header="Concept Graph" bsStyle='success'>
-
                     <div id="sixTupleGraphMain">
                         <div className="tree" id="pairGraph">
                             <ul>
                                 <li>
                                     <ul>
                                         <li>
-                                               <span className="so-label">
-                                                 {this.getRoleList(triple_roles_subjObj, 3, 0)}
-                                               </span>
+                                            <span className="so-label">
+                                                {this.getRoleList(triple_roles_subjObj, 3, 0)}
+                                            </span>
                                             {this.getAttributeList(triple_attribbutes, 3, 0)}
                                         </li>
                                         <li>
-                                              <span className="so-label">
-                                                 {this.getRoleList(triple_roles_subjObj, 3, 1)}
-                                              </span>
+                                            <span className="so-label flipped">
+                                                {this.getRoleList(triple_roles_subjObj, 3, 1)}
+                                            </span>
                                             {this.getAttributeList(attribute_raw_text)}
                                         </li>
                                         <li>
@@ -1151,20 +1154,20 @@ class ProfilerVisualizer extends React.Component {
                                         </li>
                                         <li>
                                             {this.getQueryList()}
-                                              <span className="so-label">
-                                                 {this.getRoleList(triple_roles_subjObj, 3, 2)}
-                                              </span>
+                                            <span className="so-label">
+                                                {this.getRoleList(triple_roles_subjObj, 3, 2)}
+                                            </span>
                                         </li>
                                         <li>
                                             {this.getAttributeList(triple_attribbutes, 3, 3)}
-                                              <span className="so-label">
-                                                 {this.getRoleList(triple_roles_subjObj, 3, 3)}
-                                              </span>
+                                            <span className="so-label flipped">
+                                                {this.getRoleList(triple_roles_subjObj, 3, 3)}
+                                            </span>
                                         </li>
                                     </ul>
-                                       <span className="so-label">
-                                         {this.getRoleList(triple_roles, 4)}
-                                       </span>
+                                    <span className="so-label">
+                                       {this.getRoleList(triple_roles, 4)}
+                                    </span>
                                 </li>
                             </ul>
                         </div>
@@ -1173,9 +1176,6 @@ class ProfilerVisualizer extends React.Component {
                             Query
                         </Button>
                     </div>
-                    <p id="explanationParagraph">
-                        Explanation: {this.state.sixTupleExplanation}
-                    </p>
                 </Panel>
                 {this.showSixTupleSchema()}
             </Panel>
@@ -1193,15 +1193,15 @@ class ProfilerVisualizer extends React.Component {
                         <div className="tree" id="pairGraph">
                             <ul>
                                 <li>
-                      <span className="so-label">
-                        {this.getRoleList(role_pairwise, 0)}
-                      </span>
+                                    <span className="so-label">
+                                        {this.getRoleList(role_pairwise, 0)}
+                                    </span>
                                     {this.getAttributeList(attributes, 0)}
                                 </li>
                                 <li>
-                      <span>
-                      {this.getQueryList()}
-                      </span>
+                                    <span>
+                                        {this.getQueryList()}
+                                    </span>
                                 </li>
                             </ul>
                         </div>
@@ -1256,9 +1256,9 @@ class ProfilerVisualizer extends React.Component {
                         <div className="tree" id="pairGraph">
                             <ul>
                                 <li>
-                  <span className="so-label">
-                    {this.getRoleList(['before'])}
-                  </span>
+                                    <span className="so-label">
+                                        {this.getRoleList(['before'])}
+                                    </span>
                                     {this.getAttributeList(['POS', 'NER'], 1)}
                                 </li>
                                 <li>
@@ -1266,20 +1266,17 @@ class ProfilerVisualizer extends React.Component {
                                 </li>
                                 <li>
                                     {this.getAttributeList(['POS', 'NER'], 1)}
-                  <span className="so-label">
-                    {this.getRoleList(['after'])}
-                  </span>
+                                    <span className="so-label flipped">
+                                        {this.getRoleList(['after'])}
+                                    </span>
                                 </li>
                             </ul>
                         </div>
                         <Button bsStyle="success" bsSize="small"
-                                onClick={this.queryHandle.bind(this, 0, 1)}>
+                            onClick={this.queryHandle.bind(this, 0, 1)}>
                             Query
                         </Button>
                     </div>
-                    <p id="explanationParagraph">
-                        Explanation: {this.state.tripleExplanation}
-                    </p>
                 </Panel>
                 {this.showTripleSchema()}
             </Panel>
@@ -1297,22 +1294,22 @@ class ProfilerVisualizer extends React.Component {
                         <div className="tree" id="pairGraph">
                             <ul>
                                 <li>
-                        <span className="so-label">
-                          {this.getRoleList(['Dep'])}
-                        </span>
+                                    <span className="so-label">
+                                      {this.getRoleList(['Dep'])}
+                                    </span>
                                     {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
                                 </li>
                                 <li>
-                        <span className="so-label">
-                          {this.getRoleList(['Co-reffered'])}
-                        </span>
+                                    <span className="so-label">
+                                      {this.getRoleList(['Co-reffered'])}
+                                    </span>
                                     {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
                                 </li>
                                 <li>
                                     {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
-                        <span className="so-label">
-                          {this.getRoleList(['Dep'])}
-                        </span>
+                                    <span className="so-label flipped">
+                                      {this.getRoleList(['Dep'])}
+                                    </span>
                                 </li>
                                 <li>
                                     {this.getQueryList()}
@@ -1324,9 +1321,6 @@ class ProfilerVisualizer extends React.Component {
                             Query
                         </Button>
                     </div>
-                    <p id="explanationParagraph">
-                        Explanation: {this.state.quadrupleExplanation}
-                    </p>
                 </Panel>
                 {this.showQuadrupleSchema()}
             </Panel>
