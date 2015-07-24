@@ -592,8 +592,10 @@ class ProfilerVisualizer extends React.Component {
                 this.setState({p2_a1_role: key, p2_a2_role: 1 - key});
             else if (id === 3)
                 this.setState({p2_a1_role: 1 - key, p2_a2_role: key});
-            else if (id === 4)
+            else if (id === 4) {
+                console.log('Setting the sixTuplePredRole to ' + key );
                 this.setState({sixTuplePredRole: key});
+            }
         }
     }
 
@@ -932,8 +934,9 @@ class ProfilerVisualizer extends React.Component {
         var att = quadruple_att[this.state.quadrupleAttribute];
         console.log('Quadruple: att = ' + att);
 
-
-        var pred_role = triple_roles[0];
+        var tripleRole = this.state.sixTuplePredRole;
+        console.log('tripleRole = ' + tripleRole);
+        var pred_role = triple_roles[tripleRole];
         var p1_a2 = this.state.p1_a2_role;
         var p2_a1 = this.state.p2_a1_role;
         var aggregation = this.state.sixTupleAggregation;
@@ -1127,8 +1130,6 @@ class ProfilerVisualizer extends React.Component {
                 <Panel header="Concept Graph" bsStyle='success'>
                     <div id="sixTupleGraphMain">
                         <div className="tree" id="pairGraph">
-                            <ul>
-                                <li>
                                     <ul>
                                         <li>
                                             <span className="so-label">
@@ -1143,20 +1144,19 @@ class ProfilerVisualizer extends React.Component {
                                             {this.getAttributeList(attribute_raw_text)}
                                         </li>
                                         <li>
+                                            <span className="so-label flipped">
+                                               {this.getRoleList(triple_roles, 3, 4)}
+                                            </span>
                                             {this.getAttributeList(triple_attribbutes, 3, 1)}
                                         </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <ul>
                                         <li>
+                                            <span className="so-label">
+                                                {this.getRoleList(triple_roles_subjObj, 3, 2)}
+                                            </span>
                                             {this.getAttributeList(triple_attribbutes, 3, 2)}
                                         </li>
                                         <li>
                                             {this.getQueryList()}
-                                            <span className="so-label">
-                                                {this.getRoleList(triple_roles_subjObj, 3, 2)}
-                                            </span>
                                         </li>
                                         <li>
                                             {this.getAttributeList(triple_attribbutes, 3, 3)}
@@ -1165,11 +1165,7 @@ class ProfilerVisualizer extends React.Component {
                                             </span>
                                         </li>
                                     </ul>
-                                    <span className="so-label">
-                                       {this.getRoleList(triple_roles, 4)}
-                                    </span>
-                                </li>
-                            </ul>
+
                         </div>
                         <Button bsStyle="success" bsSize="small"
                                 onClick={this.queryHandle.bind(this, 2, 3)}>
