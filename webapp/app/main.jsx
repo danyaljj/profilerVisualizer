@@ -392,10 +392,13 @@ class ProfilerVisualizer extends React.Component {
         else if (queryType === 3)
             qResult = this.state.queryResultsixTuple;
 
+        var explanation = this.pairwiseExplanation(schemaName);
+
         console.log('schemaName = ' + schemaName);
         console.log('ShowATable: qResult');
         console.log(qResult);
 
+        var rows = [];
         //if ( Array.isArray(this.state.queryResult) && schemaName in this.state.queryResult[0].counts ) {
         //  var tableContent1 = this.state.queryResult[0].counts[schemaName];
         if (Array.isArray(qResult) && schemaName in qResult[0].counts) {
@@ -437,7 +440,6 @@ class ProfilerVisualizer extends React.Component {
             console.log(contents);
             titles.push("Frequency");
 
-            var rows = [];
             var self = this;
             var title = <thead>
             <tr key="0"> {self.ShowARowOfTable(titles)} </tr>
@@ -453,12 +455,19 @@ class ProfilerVisualizer extends React.Component {
                 rows.push(<tbody>{bodyRows}</tbody>)
             }
         }
+        else
+            rows.push(<tr><td>No result found! Query something new to get some results!</td></tr>);
         var Table = require('react-bootstrap').Table;
-        return (<Table striped bordered condensed hover>{rows}</Table> );
+        return (
+            <div>
+                {explanation}
+                <Table striped bordered condensed hover>
+                    {rows}
+                </Table>
+            </div> );
     }
 
     ShowASimpleTable(schemaName, queryType) {
-        var rows = [];
         var qResult;
         if (queryType === 0)
             qResult = this.state.queryResultPairwise;
@@ -471,8 +480,11 @@ class ProfilerVisualizer extends React.Component {
         else if (queryType === 3)
             qResult = this.state.queryResultsixTuple;
 
+        var explanation = this.pairwiseExplanation(schemaName);
+
         console.log('ShowASimpleTable: qResult = ' + qResult);
 
+        var rows = [];
         //if ( Array.isArray(this.state.queryResult) && schemaName in this.state.queryResult[0].counts ) {
         //  var tableContent1 = this.state.queryResult[0].counts[schemaName];
         if (Array.isArray(qResult) && schemaName in qResult[0].counts) {
@@ -508,11 +520,18 @@ class ProfilerVisualizer extends React.Component {
             console.log('title = ' + title);
             console.log('bodyRows = ' + bodyRows);
         }
+        else
+            rows.push(<tr><td>No result found! Query something new to get some results!</td></tr>);
         //rows.push(<thead> <tr> <td> 2 </td> </tr> </thead>);
         //rows.push(<tbody> <tr> <td> 1 </td> </tr> </tbody>);
         //console.log(rows);
         var Table = require('react-bootstrap').Table;
-        return (<Table striped bordered condensed hover>{rows}</Table> );
+        return (
+            <div>
+                {explanation}
+                <Table striped bordered condensed hover>{rows}</Table>
+            </div>
+        );
     }
 
     handleSchemaTypeChange(key) {
@@ -817,37 +836,27 @@ class ProfilerVisualizer extends React.Component {
         }
 
         var output = '';
-        var explanation = '';
         var output_withLabel = '';
-        var explanation_withLabel = '';
         if (schema != '') {
             output = this.ShowATable(schema, type);
-            explanation = this.pairwiseExplanation(schema);
         }
         else if (schemaSimple != '') {
             output = this.ShowASimpleTable(schemaSimple, type);
-            explanation = this.pairwiseExplanation(schemaSimple);
         }
         else
-            explanation = this.pairwiseExplanation(''); // just explanation
+            output = this.noAlignmentError();
         if (schema_with_labels != '') {
             output_withLabel = this.ShowATable(schema_with_labels, type);
-            explanation_withLabel = this.pairwiseExplanation(schema_with_labels);
         }
-        //if (schemaSimple_with_labels != '') {
-            //output_withLabel = this.ShowASimpleTable(schemaSimple_with_labels, type);
-            //explanation_withLabel = this.pairwiseExplanation(schemaSimple_with_labels);
-        //}
-        //
-        //{explanation_withLabel}
-        //{output_withLabel}
+
+        var Panel = require('react-bootstrap').Panel;
 
         return (
             <div>
-                {explanation}
-                {output}
-                {explanation_withLabel}
-                {output_withLabel}
+                <Panel>
+                    {output}
+                    {output_withLabel}
+                </Panel>
             </div>
         );
     }
@@ -1226,12 +1235,12 @@ class ProfilerVisualizer extends React.Component {
         else
             explanation =  <h3> {schemaAllMap[schemaName]}  </h3>;
 
+        //<p id="explanationParagraph">
+        //    Explanation:
+        //</p>
         return (
             <div>
                 {explanation}
-                <p id="explanationParagraph">
-                    Explanation:
-                </p>
             </div>
         );
     }
