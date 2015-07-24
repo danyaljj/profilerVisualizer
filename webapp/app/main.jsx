@@ -163,6 +163,7 @@ var schemaAll  = [
     ['NEAREST_POS_PAIR', 'Pair of nearest POSs (before and after)'],
 
     // Dependency
+    ['DepLabel', 'Word in dependency path'],
     ['DepWithLabels', 'Dependant (with label)'],
     ['DepN', 'Dependant Noun'],
     ['DepN_WITH_LABELS', 'Dependant Noun (with label)'],
@@ -172,7 +173,7 @@ var schemaAll  = [
     ['DepV_WITH_LABELS', 'Dependant Verb (with label)'],
     ['DepVP', 'Dependant Verb Phrase'],
     ['DepVP_WITH_LABELS', 'Dependant Verb Phrase (with label)'],
-    ['DepM', 'Dependant Mention'],
+    ['DepM', 'Dependant Modifier'],
     ['DepM_WITH_LABELS', 'Dependant Mention (with label)'],
     ['DepNER', 'Dependant NER'],
     ['DepNER_WITH_LABELS', 'Dependant NER (with label)'],
@@ -322,7 +323,8 @@ class ProfilerVisualizer extends React.Component {
             dnsAddress: this.state.dnsAddress
         }, {timeout: 50000, responseType: 'json'}).then(function (response) {
                 //console.log('response.text = ' + response.text);
-                //console.log('response = ' + JSON.parse(response.text));
+                console.log('response = ');
+                console.log(JSON.parse(response.text));
                 //self.setState({queryResult: JSON.parse(response.text)});
 
                 if (conceptGraphType === 0)
@@ -405,7 +407,8 @@ class ProfilerVisualizer extends React.Component {
             var tableContent = this.sortMapByValue(tableContent1);
             var resultAll = Object.keys(tableContent);
             console.log('resultAll.length = ' + resultAll.length);
-            console.log('resultAll = ' + resultAll);
+            console.log('resultAll = ');
+            console.log(resultAll);
             var countNums = resultAll.map(function (keyElement) {
                 return tableContent[keyElement]
             });
@@ -425,6 +428,10 @@ class ProfilerVisualizer extends React.Component {
                 oneRow.push(countNums[it]); // the frequency of the element
                 contents.push(oneRow);
             }
+
+            if(resultAll.length === 0)
+                contents.push('No result! ');
+
             console.log('length of contents = ');
             console.log(contents.length);
             console.log(contents);
@@ -495,6 +502,9 @@ class ProfilerVisualizer extends React.Component {
                 });
                 rows.push(<tbody>{bodyRows}</tbody>)
             }
+            if(contents.length === 0)
+                rows.push('No result! ');
+
             console.log('title = ' + title);
             console.log('bodyRows = ' + bodyRows);
         }
@@ -706,6 +716,8 @@ class ProfilerVisualizer extends React.Component {
 
         var schema = '';
         var schemaSimple = '';
+        var schema_with_labels = '';
+        var schemaSimple_with_labels = '';
 
         var type = 0; // 0: basic  0.5: Dep
 
@@ -767,22 +779,36 @@ class ProfilerVisualizer extends React.Component {
 //  Dependency
         else if (role === 'dependency' && att === 'Noun') {
             schemaSimple = 'DepN';
+            schema_with_labels = 'DepN_WITH_LABELS';
             type = 0.5;
         }
         else if (role === 'dependency' && att === 'Noun Phrase') {
-            schemaSimple = 'DepNP';
+            //schemaSimple = 'DepNP';
+            //schemaSimple_with_labels = 'DepNP_WITH_LABELS';
+            schemaSimple = '';
+            schemaSimple_with_labels = '';
             type = 0.5;
         }
         else if (role === 'dependency' && att === 'Verb') {
             schemaSimple = 'DepV';
+            schema_with_labels = 'DepV_WITH_LABELS';
+            type = 0.5;
+        }
+        else if (role === 'dependency' && att === 'Verb Phrase') {
+            //schemaSimple = 'DepVP';
+            //schemaSimple_with_labels = 'DepVP_WITH_LABELS';
+            schemaSimple = '';
+            schemaSimple_with_labels = '';
             type = 0.5;
         }
         else if (role === 'dependency' && att === 'Modifier') {
             schemaSimple = 'DepM';
+            schema_with_labels = 'DepM_WITH_LABELS';
             type = 0.5;
         }
         else if (role === 'dependency' && att === 'NER') {
-            schema = 'DepNER_WITH_LABELS';
+            schemaSimple = 'DepNER';
+            schema_with_labels = 'DepNER_WITH_LABELS';
             type = 0.5;
         }
         else if (role === 'dependency' && att === 'Raw Text') {
@@ -792,18 +818,36 @@ class ProfilerVisualizer extends React.Component {
 
         var output = '';
         var explanation = '';
+        var output_withLabel = '';
+        var explanation_withLabel = '';
         if (schema != '') {
             output = this.ShowATable(schema, type);
             explanation = this.pairwiseExplanation(schema);
         }
-        if (schemaSimple != '') {
+        else if (schemaSimple != '') {
             output = this.ShowASimpleTable(schemaSimple, type);
             explanation = this.pairwiseExplanation(schemaSimple);
         }
+        else
+            explanation = this.pairwiseExplanation(''); // just explanation
+        if (schema_with_labels != '') {
+            output_withLabel = this.ShowATable(schema_with_labels, type);
+            explanation_withLabel = this.pairwiseExplanation(schema_with_labels);
+        }
+        //if (schemaSimple_with_labels != '') {
+            //output_withLabel = this.ShowASimpleTable(schemaSimple_with_labels, type);
+            //explanation_withLabel = this.pairwiseExplanation(schemaSimple_with_labels);
+        //}
+        //
+        //{explanation_withLabel}
+        //{output_withLabel}
+
         return (
             <div>
                 {explanation}
                 {output}
+                {explanation_withLabel}
+                {output_withLabel}
             </div>
         );
     }
@@ -1175,6 +1219,8 @@ class ProfilerVisualizer extends React.Component {
 
     pairwiseExplanation(schemaName) {
         var explanation = '';
+        console.log('schemaName inside pairwiseExplanation');
+        console.log(schemaName);
         if( schemaName === '' )
             explanation = this.noAlignmentError();
         else
