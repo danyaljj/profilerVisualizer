@@ -934,65 +934,66 @@ class ProfilerVisualizer extends React.Component {
         var schema = '';
         var schemaSimple = '';
 
-        if (pred_role === 'After')
-            schema = 'TRIPLE_AFTER';
-        else if (pred_role === 'Before')
-            schema = 'TRIPLE_BEFORE';
+        if( this.state.profilerType == 0) {  // verb
+            if (pred_role === 'After')
+                schema = 'TRIPLE_AFTER';
+            else if (pred_role === 'Before')
+                schema = 'TRIPLE_BEFORE';
 
-        // no aggregation
-        else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'no')
-            schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION';
-        else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'no')
-            schema = 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION';
-        else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Obj' && aggregation === 'no')
-            schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION';
-        else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Obj' && aggregation === 'no')
-            schema = 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION';
-        else if (pred_role === 'Co-referred before' && p1_a2 === 'Obj' && p2_a1 === 'Subj' && aggregation === 'no')
-            schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_NO_AGGREGATION';
-        else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Subj' && aggregation === 'no')
-            schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_NO_AGGREGATION';
-        else if (pred_role === 'Co-referred before' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'no')
-            schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION';
-        else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'no')
-            schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION';
+            // no aggregation
+            else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'no')
+                schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION';
+            else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'no')
+                schema = 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_NO_AGGREGATION';
+            else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Obj' && aggregation === 'no')
+                schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION';
+            else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Obj' && aggregation === 'no')
+                schema = 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_NO_AGGREGATION';
+            else if (pred_role === 'Co-referred before' && p1_a2 === 'Obj' && p2_a1 === 'Subj' && aggregation === 'no')
+                schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_NO_AGGREGATION';
+            else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Subj' && aggregation === 'no')
+                schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_NO_AGGREGATION';
+            else if (pred_role === 'Co-referred before' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'no')
+                schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION';
+            else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'no')
+                schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION';
 
-        // aggregation: only co-reffed
-        else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'co-referred-element')
-            schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT';
-        else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'co-referred-element')
-            schema = 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT';
-        else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Obj' && aggregation === 'co-referred-element')
-            schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT';
-        else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Obj' && aggregation === 'co-referred-element')
-            schema = 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT';
-        else if (pred_role === 'Co-referred before' && p1_a2 === 'Obj' && p2_a1 === 'Subj' && aggregation === 'co-referred-element')
-            schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT';
-        else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Subj' && aggregation === 'co-referred-element')
-            schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT';
-        else if (pred_role === 'Co-referred before' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'co-referred-element')
-            schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT';
-        else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'co-referred-element')
-            schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT';
+            // aggregation: only co-reffed
+            else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'co-referred-element')
+                schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT';
+            else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'co-referred-element')
+                schema = 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT';
+            else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Obj' && aggregation === 'co-referred-element')
+                schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT';
+            else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Obj' && aggregation === 'co-referred-element')
+                schema = 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT';
+            else if (pred_role === 'Co-referred before' && p1_a2 === 'Obj' && p2_a1 === 'Subj' && aggregation === 'co-referred-element')
+                schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT';
+            else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Subj' && aggregation === 'co-referred-element')
+                schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT';
+            else if (pred_role === 'Co-referred before' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'co-referred-element')
+                schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT';
+            else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'co-referred-element')
+                schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT';
 
-        // aggregation: both
-        else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'both')
-            schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH';
-        else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'both')
-            schema = 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH';
-        else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Obj' && aggregation === 'both')
-            schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH';
-        else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Obj' && aggregation === 'both')
-            schema = 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH';
-        else if (pred_role === 'Co-referred before' && p1_a2 === 'Obj' && p2_a1 === 'Subj' && aggregation === 'both')
-            schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH';
-        else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Subj' && aggregation === 'both')
-            schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH';
-        else if (pred_role === 'Co-referred before' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'both')
-            schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH';
-        else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'both')
-            schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH';
-
+            // aggregation: both
+            else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'both')
+                schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH';
+            else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'both')
+                schema = 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH';
+            else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Obj' && aggregation === 'both')
+                schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH';
+            else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Obj' && aggregation === 'both')
+                schema = 'TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH';
+            else if (pred_role === 'Co-referred before' && p1_a2 === 'Obj' && p2_a1 === 'Subj' && aggregation === 'both')
+                schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH';
+            else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Subj' && aggregation === 'both')
+                schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH';
+            else if (pred_role === 'Co-referred before' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'both')
+                schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH';
+            else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'both')
+                schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH';
+        }
         console.log('SixTuple: schema = ' + schema);
         console.log('SixTuple: schemaSimple = ' + schemaSimple);
 
