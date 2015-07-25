@@ -40,9 +40,9 @@ var triple_roles_subjObj = ['Subj', 'Obj'];
 
 var attributes = ['NER', 'Noun', 'Noun Phrase', 'Modifier', 'Verb', 'Verb Phrase', 'Entity', 'Raw Text'];
 
-var triple_attribbutes = ['Raw Text', 'Aggregate'];
+var triple_attribbutes = ['Raw String with POS=NP', 'Aggregate'];
 
-var attribute_raw_text = ['Raw Text'];
+var attribute_raw_text = ['Raw String with POS=VP'];
 
 var triple_aggregation_types = ['no', 'co-referred-element', 'both'];
 
@@ -193,22 +193,22 @@ var schemaAll  = [
     ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_NO_AGGREGATION', 'triple after with coref between obj-subj'],
     ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION', 'triple before with coref between obj-obj'],
     ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION', 'triple after with coref between obj-obj'],
-    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', 'triple before with coref between subj-subj'],
-    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', ''],
-    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT', ''],
-    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT', ''],
-    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT', ''],
-    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT', ''],
-    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT', ''],
-    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT', ''],
-    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', ''],
-    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', ''],
-    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH', ''],
-    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH', ''],
-    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH', ''],
-    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH', ''],
-    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH', ''],
-    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH', ''],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', 'triple before with coref between subj-subj (corref-element surface dropped)'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT', 'triple after with coref between subj-subj (corref-element surface dropped)'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT', 'triple before with coref between subj-obj  (corref-element surface dropped)'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_COREFED_ELEMENT', 'triple before with coref between subj-obj (corref-element surface dropped)'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT', 'triple before with coref between obj-subj (corref-element surface dropped)'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_COREFED_ELEMENT', 'triple before with coref between obj-subj (corref-element surface dropped)'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT', 'triple before with coref between obj-obj (corref-element surface dropped)'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT', 'triple before with coref between obj-obj (corref-element surface dropped)'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', 'triple before with coref between subj-subj (all elements dropped)'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', 'triple after with coref between subj-subj (all elements dropped)'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH', 'triple before with coref between subj-subj (all elements dropped)'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH', 'triple after with coref between subj-subj (all elements dropped)'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH', 'triple before with coref between subj-subj (all elements dropped)'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH', 'triple after with coref between subj-subj (all elements dropped)'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH', 'triple before with coref between subj-subj (all elements dropped)'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH', 'triple after with coref between subj-subj (all elements dropped)'],
     ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION', ''],
     ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION', ''],
     ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVEE_OBJ_SUBJ_NO_AGGREGATION', ''],
@@ -298,7 +298,7 @@ class ProfilerVisualizer extends React.Component {
             p1_a2_att: 0,
             p2_a1_att: 0,
             p2_a2_att: 0,
-            sixTupleAggregation: 'np',
+            sixTupleAggregation: 'no',
             sixTuplePredRole: 0
         };
     }
@@ -584,6 +584,7 @@ class ProfilerVisualizer extends React.Component {
         else if (type === 2)
             this.setState({quadrupleRole: key});
         else if (type === 3) {
+            console.log('id inside handleSelectRoleList = ' + id);
             if (id === 0)
                 this.setState({p1_a1_role: key, p1_a2_role: 1 - key});
             else if (id === 1)
@@ -684,15 +685,6 @@ class ProfilerVisualizer extends React.Component {
         var wikiDisabled = '';
         if (isWikiDisabled)
             wikiDisabled = 'disabled';
-
-
-        var doNothing = function() {
-            // This acts as a no-opt for the MenuItem onSelect callback
-        };
-
-        //return (
-        //    <DropdownButton bsStyle='danger' title='Attribute' bsSize='xsmall'>
-        //        <MenuItem onSelect={doNothing}>
 
         var queryMenuStyle = {
             width: "80%",
@@ -926,20 +918,19 @@ class ProfilerVisualizer extends React.Component {
         );
     }
 
-
     showSixTupleSchema() {
         console.log('Triple: this.state.sixTupleAttribute = ' + this.state.sixTupleAttribute);
-
-        var quadruple_att = ['Dep Label', 'Aggregate'];
-        var att = quadruple_att[this.state.quadrupleAttribute];
-        console.log('Quadruple: att = ' + att);
 
         var tripleRole = this.state.sixTuplePredRole;
         console.log('tripleRole = ' + tripleRole);
         var pred_role = triple_roles[tripleRole];
-        var p1_a2 = this.state.p1_a2_role;
-        var p2_a1 = this.state.p2_a1_role;
+        console.log('pred_role = ' + pred_role);
+        var p1_a2 = triple_roles_subjObj[this.state.p1_a2_role];
+        var p2_a1 = triple_roles_subjObj[this.state.p2_a1_role];
+        console.log('p1_a2 = ' + p1_a2);
+        console.log('p2_a1 = '+ p2_a1);
         var aggregation = this.state.sixTupleAggregation;
+        console.log('aggregation = ' + aggregation);
         var schema = '';
         var schemaSimple = '';
 
@@ -1008,8 +999,10 @@ class ProfilerVisualizer extends React.Component {
         var output = '';
         if (schema != '')
             output = this.ShowATable(schema, 3);
-        if (schemaSimple != '')
+        else if (schemaSimple != '')
             output = this.ShowASimpleTable(schemaSimple, 3);
+        else
+            output = this.noAlignmentError();
         var Panel = require('react-bootstrap').Panel;
         return (
             <Panel>
@@ -1130,41 +1123,41 @@ class ProfilerVisualizer extends React.Component {
                 <Panel header="Concept Graph" bsStyle='success'>
                     <div id="sixTupleGraphMain">
                         <div className="tree" id="pairGraph">
-                                    <ul>
-                                        <li>
-                                            <span className="so-label">
-                                                {this.getRoleList(triple_roles_subjObj, 3, 0)}
-                                            </span>
-                                            {this.getAttributeList(triple_attribbutes, 3, 0)}
-                                        </li>
-                                        <li>
-                                            <span className="so-label flipped">
-                                                {this.getRoleList(triple_roles_subjObj, 3, 1)}
-                                            </span>
-                                            {this.getAttributeList(attribute_raw_text)}
-                                        </li>
-                                        <li>
-                                            <span className="so-label flipped">
-                                               {this.getRoleList(triple_roles, 3, 4)}
-                                            </span>
-                                            {this.getAttributeList(triple_attribbutes, 3, 1)}
-                                        </li>
-                                        <li>
-                                            <span className="so-label">
-                                                {this.getRoleList(triple_roles_subjObj, 3, 2)}
-                                            </span>
-                                            {this.getAttributeList(triple_attribbutes, 3, 2)}
-                                        </li>
-                                        <li>
-                                            {this.getQueryList()}
-                                        </li>
-                                        <li>
-                                            {this.getAttributeList(triple_attribbutes, 3, 3)}
-                                            <span className="so-label flipped">
-                                                {this.getRoleList(triple_roles_subjObj, 3, 3)}
-                                            </span>
-                                        </li>
-                                    </ul>
+                            <ul>
+                                <li>
+                                    <span className="so-label">
+                                        {this.getRoleList(triple_roles_subjObj, 3, 0)}
+                                    </span>
+                                    {this.getAttributeList(triple_attribbutes, 3, 0)}
+                                </li>
+                                <li>
+                                    <span className="so-label flipped">
+                                        {this.getRoleList(triple_roles_subjObj, 3, 1)}
+                                    </span>
+                                    {this.getAttributeList(attribute_raw_text)}
+                                </li>
+                                <li>
+                                    <span className="so-label flipped">
+                                       {this.getRoleList(triple_roles, 3, 4)}
+                                    </span>
+                                    {this.getAttributeList(triple_attribbutes, 3, 1)}
+                                </li>
+                                <li>
+                                    <span className="so-label">
+                                        {this.getRoleList(triple_roles_subjObj, 3, 2)}
+                                    </span>
+                                    {this.getAttributeList(triple_attribbutes, 3, 2)}
+                                </li>
+                                <li>
+                                    {this.getQueryList()}
+                                </li>
+                                <li>
+                                    {this.getAttributeList(triple_attribbutes, 3, 3)}
+                                    <span className="so-label flipped">
+                                        {this.getRoleList(triple_roles_subjObj, 3, 3)}
+                                    </span>
+                                </li>
+                            </ul>
 
                         </div>
                         <Button bsStyle="success" bsSize="small"
@@ -1487,7 +1480,17 @@ class ProfilerVisualizer extends React.Component {
                         then extract and organize the resulting statistical
                         KB using a new tool, the <strong>Profiler</strong>.
 
-                        <br />
+                    </div>
+                    Here is a demo of a few examples:
+                    <br />
+
+                    <iframe width="500" height="300"
+                        src="http://www.youtube.com/embed/LcIytqkbdlo">
+                    </iframe>
+
+                    <br />
+
+                    <div style={helpPanelParagraphStyle}>
                         <Label bsStyle='success'>Statistics</Label> The profiler database is around 200GB in size, and it contains 3,636,263 profiles
                         for Wikipedia entities and 313,156 profiles for Verbsense entities.
 
