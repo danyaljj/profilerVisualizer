@@ -1488,7 +1488,7 @@ class ProfilerVisualizer extends React.Component {
                     Here is a demo of a few examples:
                     <br />
 
-                    <iframe width="420" height="315" src="https://www.youtube.com/watch?v=Lkap9c-gvf0" frameborder="0" allowfullscreen></iframe>
+                    <iframe width="840" height="472" src="https://www.youtube.com/embed/Lkap9c-gvf0" frameborder="0" allowfullscreen></iframe>
 
                     <br />
 
