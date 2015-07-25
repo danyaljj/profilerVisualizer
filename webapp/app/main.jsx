@@ -1596,27 +1596,6 @@ class ProfilerVisualizer extends React.Component {
         //<h1> DEP_COREF_WITH_PATH_BASED_LABELS  </h1>
         //{this.ShowATable('DEP_COREF_WITH_PATH_BASED_LABELS', 2)}
 
-        //<ButtonGroup vertical>
-        //    <Button onClick={this.setSurfaceAndLabelAndQuery.bind(this, "Seattle", "http://en.wikipedia.org/wiki/Seattle,_Washington", 1)}>Surface: Seattle, Label: <a href="http://en.wikipedia.org/wiki/Seattle,_Washington">
-        //        http://en.wikipedia.org/wiki/Seattle,_Washington
-        //    </a> (the city)</Button>
-        //    <Button>Surface: Seattle, Label: <a href="http://en.wikipedia.org/wiki/Seattle_Seahawks">
-        //        http://en.wikipedia.org/wiki/Seattle_Seahawks
-        //    </a> (the football team)</Button>
-        //    <Button>Surface: Seattle, Label: <a href="http://en.wikipedia.org/wiki/Seattle_Storm">
-        //        http://en.wikipedia.org/wiki/Seattle_Storm
-        //    </a> (the basketball team)</Button>
-        //    <Button>Surface: Seattle, Label: <a href="http://en.wikipedia.org/wiki/Seattle_Mariners">
-        //        http://en.wikipedia.org/wiki/Seattle_Mariners
-        //    </a> (the baseball team)</Button>
-        //    <Button>Surface: Seattle, Label: <a href="http://en.wikipedia.org/wiki/Seattle_University">
-        //        http://en.wikipedia.org/wiki/Seattle_University
-        //    </a> (the university)</Button>
-        //    <Button>Surface: Seattle, Label: <a href="http://en.wikipedia.org/wiki/Seattle_Symphony">
-        //        http://en.wikipedia.org/wiki/Seattle_Symphony
-        //    </a> (Seattle symphony)</Button>
-        //</ButtonGroup>
-
         var seattleQueries = [
             ["Seattle", "http://en.wikipedia.org/wiki/Seattle,_Washington", "the city"],
             ["Seattle","http://en.wikipedia.org/wiki/Seattle_Seahawks", "the football team"],
@@ -1625,11 +1604,6 @@ class ProfilerVisualizer extends React.Component {
             ["Seattle","http://en.wikipedia.org/wiki/Seattle_University", "the university"],
             ["Seattle","http://en.wikipedia.org/wiki/Seattle_Symphony", "Seattle symphony"]
         ];
-
-        //<ButtonGroup vertical>
-        //    <Button>Surface: grow, Label: 03 (produce by cultivation)</Button>
-        //    <Button>Surface: grow, Label: 04 (go from child to adult) </Button>
-        //</ButtonGroup>
 
         var verbQueries = [
             ["grow", "03", "produce by cultivation"],
@@ -1641,14 +1615,14 @@ class ProfilerVisualizer extends React.Component {
         seattleQueries.forEach(function(item){
             seattleQueryOut.push( <Button
                 onClick={self.setSurfaceAndLabelAndQuery.bind(self, item[0], item[1], 1)}>
-                Surface: {item[1]}, Label: <a href={item[1]}> {item[1]} </a>, ({item[2]}) </Button>);
+                Surface: {item[0]}, Label: <a href={item[1]}> {item[1]} </a>, ({item[2]}) </Button>);
         });
 
         var verbQueryOut = [];
         verbQueries.forEach(function(item){
             verbQueryOut.push( <Button
                 onClick={self.setSurfaceAndLabelAndQuery.bind(self, item[0], item[1], 0)}>
-                Surface: {item[1]}, Label: {item[1]}, ({item[2]}) </Button>);
+                Surface: {item[0]}, Label: {item[1]}, ({item[2]}) </Button>);
         });
 
         return ( <div>
@@ -1713,7 +1687,7 @@ class ProfilerVisualizer extends React.Component {
                         the resulting statistics will be average of the statistics over all of the profiles
                         which match the "Surface".
                         <br/>
-                        <Label bsStyle='danger'>Note</Label> The database of profiles is
+                        <Label bsStyle='danger'>Note</Label> The database of the Profiler is
                         HUGE! We keep the full database on an Amazon EC2 server. To save money
                         the server is often off, although many of the examples people have tried
                         are cached in the visualizer. If you need to use this as resource in your
