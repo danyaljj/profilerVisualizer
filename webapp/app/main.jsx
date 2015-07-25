@@ -1291,7 +1291,7 @@ class ProfilerVisualizer extends React.Component {
                                     <span className="so-label">
                                       {this.getRoleList(['Dep'])}
                                     </span>
-                                    {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
+                                    {this.getAttributeList(['Surface'], 2)}
                                 </li>
                                 <li>
                                     <span className="so-label flipped">
