@@ -84,12 +84,16 @@ var pairwiseSchemaDepSimple = [
     'DepN',
     'DepNP',
     'DepV',
-    'DepM'
+    'DepM',
+    'DepNER'
 ];
 
 var pairwiseSchemaDep = [
-    'DepNER_WITH_LABELS',
-    'DepLabel'
+    'DepN_WITH_LABELS',
+    'DepV_WITH_LABELS',
+    'DepM_WITH_LABELS',
+    'DepLabel',
+    'DepNER_WITH_LABELS'
 ];
 
 var tripleSchema = [
@@ -1548,30 +1552,6 @@ class ProfilerVisualizer extends React.Component {
         var ListGroup = require('react-bootstrap').ListGroup;
         var ListGroupItem = require('react-bootstrap').ListGroupItem;
         var Label = require('react-bootstrap').Label;
-
-        console.log('logging from the query view ');
-        console.log(this.state.profilerType);
-
-        //var categories = [];
-        //for (var i = 0; i < schemaBasic.length; i++) {
-        //    categories.push(<MenuItem eventKey='1'>{schemaBasic[i][0]}</MenuItem>);
-        //}
-        //if (this.state.profilerType == 1) { // wiki
-        //}
-        //else { // verb
-        //    console.log('addinng the verb schemas');
-        //    for (i = 0; i < schemaDep.length; i++) {
-        //        categories.push(<MenuItem eventKey='1'>{schemaDep[i][0]}</MenuItem>);
-        //    }
-        //    for (i = 0; i < tripleSchema.length; i++) {
-        //        categories.push(<MenuItem eventKey='1'>{tripleSchema[i][0]}</MenuItem>);
-        //    }
-        //}
-
-        //var depTables = [];
-        //schemaDep.forEach(function(entry){
-        //    depTables.push( <div> {entry[0]} </div> )
-        //});
 
         var helpPanelStyle = {
             margin: "0px"
