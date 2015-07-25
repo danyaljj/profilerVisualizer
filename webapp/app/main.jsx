@@ -901,13 +901,12 @@ class ProfilerVisualizer extends React.Component {
         var schema = '';
         var schemaSimple = '';
 
-        if (att === 'Dep Label')
-            schema = 'DEP_COREF';
-        else if (att === 'Aggregate')
+        //if (att === 'Dep Label')
+        //    schema = 'DEP_COREF';
+        //else if (att === 'Aggregate')
             schema = 'DEP_COREF_WITH_PATH_BASED_LABELS';
 
         console.log('Quadruple: schema = ' + schema);
-        console.log('Quadruple: schemaSimple = ' + schemaSimple);
 
         var Panel = require('react-bootstrap').Panel;
         var output = '';
