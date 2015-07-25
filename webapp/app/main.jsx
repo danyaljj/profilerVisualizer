@@ -207,12 +207,12 @@ var schemaAll  = [
     ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_COREFED_ELEMENT', 'triple before with coref between obj-obj (corref-element surface dropped)'],
     ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', 'triple before with coref between subj-subj (all elements dropped)'],
     ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_BOTH', 'triple after with coref between subj-subj (all elements dropped)'],
-    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH', 'triple before with coref between subj-subj (all elements dropped)'],
-    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH', 'triple after with coref between subj-subj (all elements dropped)'],
-    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH', 'triple before with coref between subj-subj (all elements dropped)'],
-    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH', 'triple after with coref between subj-subj (all elements dropped)'],
-    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH', 'triple before with coref between subj-subj (all elements dropped)'],
-    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH', 'triple after with coref between subj-subj (all elements dropped)'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH', 'triple before with coref between subj-obj (all elements dropped)'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_SUBJ_OBJ_REMOVE_BOTH', 'triple after with coref between subj-obj (all elements dropped)'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH', 'triple before with coref between obj-subj (all elements dropped)'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_SUBJ_REMOVE_BOTH', 'triple after with coref between obj-subj (all elements dropped)'],
+    ['TRIPLE_BEFORE_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH', 'triple before with coref between obj-obj (all elements dropped)'],
+    ['TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_REMOVE_BOTH', 'triple after with coref between obj-obj (all elements dropped)'],
     ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION', ''],
     ['TRIPLE_AFTER_WITH_COREF_LINK_WITH_CONNECTIVE_SUBJ_SUBJ_NO_AGGREGATION', ''],
     ['TRIPLE_BEFORE_WITH_COREF_LINK_WITH_CONNECTIVEE_OBJ_SUBJ_NO_AGGREGATION', ''],
@@ -962,7 +962,7 @@ class ProfilerVisualizer extends React.Component {
             else if (pred_role === 'Co-referred after' && p1_a2 === 'Obj' && p2_a1 === 'Obj' && aggregation === 'no')
                 schema = 'TRIPLE_AFTER_WITH_COREF_LINK_OBJ_OBJ_NO_AGGREGATION';
 
-            // aggregation: only co-reffed
+            // aggregation: only co-refed
             else if (pred_role === 'Co-referred before' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'co-referred-element')
                 schema = 'TRIPLE_BEFORE_WITH_COREF_LINK_SUBJ_SUBJ_REMOVE_COREFED_ELEMENT';
             else if (pred_role === 'Co-referred after' && p1_a2 === 'Subj' && p2_a1 === 'Subj' && aggregation === 'co-referred-element')
@@ -1294,13 +1294,13 @@ class ProfilerVisualizer extends React.Component {
                                     {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
                                 </li>
                                 <li>
-                                    <span className="so-label">
-                                      {this.getRoleList(['Co-reffered'])}
+                                    <span className="so-label flipped">
+                                      {this.getRoleList(['Co-refered'])}
                                     </span>
-                                    {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
+                                    {this.getAttributeList(['Aggregate'], 2)}
                                 </li>
                                 <li>
-                                    {this.getAttributeList(['Dep Label', 'Aggregate'], 2)}
+                                    {this.getAttributeList(['Aggregate'], 2)}
                                     <span className="so-label flipped">
                                       {this.getRoleList(['Dep'])}
                                     </span>
