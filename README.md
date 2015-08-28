@@ -1,6 +1,6 @@
 # Profiler Visualization
 
-This is a web interface for the profiler. 
+This is a web interface for the Profiler (More can be found in [this paper](http://web.engr.illinois.edu/~khashab2/files/2014_2015_profiler/2015_ijcai_profiler.pdf)). 
 
 - The assumptions is that the profiler data base is running on a machine on a AWS EC2 machine. 
 - The user will be able to choose knowledge schema and qeuery based on that. 
