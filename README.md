@@ -47,6 +47,10 @@ This web application which includes a ReactJS client-side application and an API
 
 5. Navigate to [http://localhost:8095/api/hello](http://localhost:8095/api/hello) to see the service response.
 
+After the step 4, you should be able to see the following in your screen: 
+
+![alt text](screenshot.png)
+
 ## Development
 
 * Dynamically recompile as you make changes via: `~compile`.
@@ -57,7 +61,6 @@ This web application which includes a ReactJS client-side application and an API
 Changes to the front-end code will be applied as you make them, even if you only run the `reStart` command without the `~`. If you make changes to the frontend build configuration and need to restart `npm`, you'll have to use `reStop` to stop the background `npm` process, then run `reStart` again to restart it.
 
 There's a slight lag, but keep an eye on your `sbt` console for information regarding the front-end build.
-
 
 ## Questions?
 
