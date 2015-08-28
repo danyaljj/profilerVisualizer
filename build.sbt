@@ -15,7 +15,7 @@ libraryDependencies ++= Seq(
   "edu.illinois.cs.cogcomp" % "profiler-client" % "2.0-SNAPSHOT",
   "org.scala-lang.modules" %% "scala-pickling" % "0.10.1",
   "net.debasishg" %% "redisclient" % "3.0"
-)
+).map(_.force())
 
 libraryDependencies ~= { _.map(_.exclude("ch.qos.logback", "logback-classic")) }
 
