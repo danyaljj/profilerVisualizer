@@ -17,6 +17,8 @@ libraryDependencies ++= Seq(
   "net.debasishg" %% "redisclient" % "3.0"
 )
 
+libraryDependencies ~= { _.map(_.exclude("ch.qos.logback", "logback-classic")) }
+
 javaOptions ++= Seq(s"-Dlogback.appname=${name.value}")
 
 resolvers += Resolver.mavenLocal
