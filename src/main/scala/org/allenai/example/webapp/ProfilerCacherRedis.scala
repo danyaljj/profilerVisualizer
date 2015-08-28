@@ -7,7 +7,7 @@ import com.redis._
 /** Created by i-danielk on 7/16/15.
   */
 object ProfilerCacherRedis {
-  val host = "ec2-50-16-99-85.compute-1.amazonaws.com"
+  val host = "localhost"
   val port = 27017
   lazy val profilerClient = new ProfilerClient(host, port)
   val r = new RedisClient("localhost", 6379)
